@@ -5,7 +5,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import prg2.connectfour.comlayer.can.converter.CanUsbW682;
 import prg2.connectfour.comlayer.coretypes.Int24;
 
 public class CoreTypeUnitTest {

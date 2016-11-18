@@ -3,8 +3,6 @@ package prg2.connectfour.comlayer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import prg2.connectfour.comlayer.can.CanComLayerConfig;
-import prg2.connectfour.comlayer.can.CanLowLevelCommunicator;
 import prg2.connectfour.comlayer.controlcmds.ControlCmd;
 import prg2.connectfour.comlayer.tcp.TcpComLayerConfig;
 import prg2.connectfour.comlayer.tcp.TcpLowLevelCommunicator;
@@ -27,8 +25,6 @@ public class Communicator implements LowLevelCmdReceiver {
 		this.config = config;
 		if (config instanceof TcpComLayerConfig) {
 			llCommunicator = new TcpLowLevelCommunicator();
-		} else if (config instanceof CanComLayerConfig) {
-			llCommunicator = new CanLowLevelCommunicator();
 		} else {
 			throw new IllegalArgumentException("Config of Type " + config.getClass().getSimpleName() + " not known");
 		}
