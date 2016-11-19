@@ -1,6 +1,10 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
+// Apply the application plugin and set main class
+apply plugin: 'application'
+mainClassName = "prg2.connectfour.ConnectFour"
+
 // In this section you declare where to find the dependencies of your project
 repositories {
   jcenter()
