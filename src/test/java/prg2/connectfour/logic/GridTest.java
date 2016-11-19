@@ -1,6 +1,11 @@
+package prg2.connectfour.test.logic;
+
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.Assert;
+
+import prg2.connectfour.logic.Grid;
+import prg2.connectfour.logic.Cell;
 
 public class GridTest {
     private Grid subject;

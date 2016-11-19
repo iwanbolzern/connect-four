@@ -1,3 +1,7 @@
+package prg2.connectfour.logic;
+
+import prg2.connectfour.logic.Cell;
+
 public class Grid {
     private int width;
     private int height;
