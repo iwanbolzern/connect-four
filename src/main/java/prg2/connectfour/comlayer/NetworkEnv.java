@@ -37,6 +37,12 @@ public class NetworkEnv {
 					public void msgReceived(Msg msg) {
 						if(msg instanceof HelloMsg) {
 							helloMsgReceived((HelloMsg)msg);
+						} else if(msg instanceof HelloResponseMsg) {
+							helloResponseMsgReceived((HelloResponseMsg)msg);
+						} else if(msg instanceof InvitationMsg) {
+							invitationMsgReceived((InvitationMsg)msg);
+						} else if(msg instanceof InvitationResponseMsg) {
+							invitationResponseReceived((InvitationResponseMsg)msg);
 						}
 					}
 				});
@@ -57,7 +63,14 @@ public class NetworkEnv {
 		}
 	}
 	
-	private void invatationMsgReceived(InvitationMsg invitation) {
+	private void helloResponseMsgReceived(HelloResponseMsg msg) {
+		if(!activeConnections.containsKey(msg.getToken())) {
+			activeConnections.put(msg.getToken(), new Pair(msg.getIpAddress(), msg.getPort()));
+			onNewPlayerDetected((HelloMsg)msg);
+		}
+	}
+	
+	private void invitationMsgReceived(InvitationMsg invitation) {
 		
 	}
 	
