@@ -1,47 +1,40 @@
-package prg2.connectfour.comlayer.udp;
+package prg2.connectfour.comlayer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import prg2.connectfour.comlayer.controlcmds.ControlCmd;
-import prg2.connectfour.comlayer.controlcmds.ControlCmdReceiver;
-import prg2.connectfour.comlayer.controlcmds.tcp.TcpConnectedCmd;
-import prg2.connectfour.comlayer.controlcmds.tcp.TcpDisconnectedCmd;
-import prg2.connectfour.comlayer.controlcmds.udp.UdpDisconnectedCmd;
+import prg2.connectfour.comlayer.coretypes.Int32;
 import prg2.connectfour.comlayer.coretypes.UInt32;
+import prg2.connectfour.utils.Utils;
 
 public class UdpConnection {
 	private static final int lengthSize = 4;
 	private static final long maxMsgSize = 2147483648L - 1; // 2 ^ 31 - 1
 
-	private int communicationId;
-
 	private DatagramSocket socket;
-	private int port;
-	private String destination;
+	private int listenPort;
+	private String token;
 
 	private ArrayList<MsgReceiver> receivers = new ArrayList<>();
-	private ArrayList<ControlCmdReceiver> controlReceivers = new ArrayList<>();
 
 	private boolean isListening;
 	private Thread listenThread;
 	private Object lock = new Object();
 
-	private ArrayList<byte[]> pendingOut = new ArrayList<>();
-
-	public void init(final UdpConnectionConfig config) {
-		this.port = config.getPortNumber();
-		this.destination = config.getHostName();
+	public void init(int listenPort) {
+		this.listenPort = listenPort;
+		this.token = Utils.generateSecureToken();
 		try {
-			socket = new DatagramSocket(this.port);
+			socket = new DatagramSocket(this.listenPort);
 			startListen();
 		} catch (SocketException e) {
 			e.printStackTrace();
@@ -50,15 +43,6 @@ public class UdpConnection {
 
 	public void registerMsgReceiver(MsgReceiver receiver) {
 		this.receivers.add(receiver);
-	}
-
-	public void registerControlReceiver(ControlCmdReceiver receiver) {
-		this.controlReceivers.add(receiver);
-	}
-
-	private void sendControlCmd(ControlCmd cmd) {
-		for (ControlCmdReceiver receiver : controlReceivers)
-			receiver.receiveControlCmd(cmd);
 	}
 
 	private void startListen() {
@@ -89,25 +73,31 @@ public class UdpConnection {
 					byte[] payLoad = new byte[(int) length];
 					packet = new DatagramPacket(payLoad, payLoad.length);
 					this.socket.receive(packet);
-
-					synchronized (lock) {
-						for (MsgReceiver receiver : receivers) {
-							receiver.msgReceived(payLoad);
+					
+					try {
+						Object msg = Utils.getObjectFromByteArray(payLoad);
+						if(Msg.class.isAssignableFrom(msg.getClass())) {
+							Msg message = (Msg)msg;
+							message.setIpAddress(packet.getAddress());
+							synchronized (lock) {
+								for (MsgReceiver receiver : receivers) {
+									receiver.msgReceived((Msg)msg);
+								}
+							}
 						}
+					} catch (ClassNotFoundException e) {
+						System.err.println("Corrupt Msg received");
 					}
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			isListening = false;
-			synchronized (lock) {
-				sendControlCmd(new UdpDisconnectedCmd() {
-					{
-						setCommunicationId(communicationId);
-					}
-				});
-			}
 		}
+	}
+	
+	public int getListenPort() {
+		return this.listenPort;
 	}
 
 	/**
@@ -116,8 +106,12 @@ public class UdpConnection {
 	 * @param message
 	 *            msg to send
 	 */
-	public void sendMessage(final byte[] msg) {
-		DatagramPacket packet = new DatagramPacket(msg, msg.length, new InetSocketAddress(this.destination, this.port));
+	public void sendMessage(Msg msg, InetAddress destination, int port) {
+		msg.setToken(this.token);
+		byte[] byteMsg = Utils.getByteArrayFromObject(msg);
+		int length = byteMsg.length;
+		byte[] wholeMsg = Utils.joinArray(Int32.parse(length).getBytes(), byteMsg);
+		DatagramPacket packet = new DatagramPacket(wholeMsg, wholeMsg.length, new InetSocketAddress(destination, port));
 		try {
 			DatagramSocket dSocket = new DatagramSocket();
 			dSocket.send(packet);
@@ -127,13 +121,9 @@ public class UdpConnection {
 			e.printStackTrace();
 		}
 	}
+	
+	public interface MsgReceiver {
+		public void msgReceived(Msg msg);
 
-	public void setCommunicationId(int conId) {
-		this.communicationId = conId;
 	}
-
-	public int getCommunicationId() {
-		return this.communicationId;
-	}
-
 }

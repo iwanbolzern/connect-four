@@ -36,4 +36,8 @@ public class Int32 {
 
 		return new Int32(intValue);
 	}
+	
+	public static Int32 parse(final int number) {
+		return new Int32(number);
+	}
 }
