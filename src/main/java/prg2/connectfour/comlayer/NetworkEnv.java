@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import prg2.connectfour.utils.Pair;
-import prg2.connectfour.utils.Utils;
 
 public class NetworkEnv {
 	
@@ -62,20 +61,20 @@ public class NetworkEnv {
 	
 	private void helloMsgReceived(HelloMsg msg) {
 		if(!activeConnections.containsKey(msg.getToken())) {
-			activeConnections.put(msg.getToken(), new Pair(msg.getIpAddress(), msg.getPort()));
+			activeConnections.put(msg.getToken(), new Pair<>(msg.getIpAddress(), msg.getPort()));
 			HelloResponseMsg response = new HelloResponseMsg() {{
 				setName(playerName);
 				setPort(udpConnection.getListenPort());
 			}};
 			udpConnection.sendMessage(response, msg.getIpAddress(), msg.getPort());
-			onNewPlayerDetected((HelloMsg)msg);
+			onNewPlayerDetected(msg);
 		}
 	}
 	
 	private void helloResponseMsgReceived(HelloResponseMsg msg) {
 		if(!activeConnections.containsKey(msg.getToken())) {
-			activeConnections.put(msg.getToken(), new Pair(msg.getIpAddress(), msg.getPort()));
-			onNewPlayerDetected((HelloMsg)msg);
+			activeConnections.put(msg.getToken(), new Pair<>(msg.getIpAddress(), msg.getPort()));
+			onNewPlayerDetected(msg);
 		}
 	}
 	
