@@ -1,1 +1,0 @@
-in diesen namespace kommt jegliche logik welche mit dem spiel zu tun hat. z.B. computer gegner
