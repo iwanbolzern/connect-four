@@ -1,7 +1,5 @@
 package prg2.connectfour.logic;
 
-import prg2.connectfour.logic.Cell;
-
 public class Grid {
     private int width;
     private int height;
@@ -20,10 +18,29 @@ public class Grid {
     }
 
     public Cell getCellAt(int x, int y) {
-        int pos = (this.width * y) + x;
+        int pos = getIndex(x, y);
         if (pos < 0 || pos > this.cells.length)
             return null;
 
         return cells[pos];
+    }
+
+    public boolean dropOnColumn(Player player, int column) {
+        if (column < 0 || column > this.width)
+            return false;
+
+        for (int y = 0; y < this.height; ++y) {
+            int pos = getIndex(column, y);
+            if (cells[pos].getOwner() == null) {
+                cells[pos].setOwner(player);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private int getIndex(int x, int y) {
+        return (this.width * y) + x;
     }
 }

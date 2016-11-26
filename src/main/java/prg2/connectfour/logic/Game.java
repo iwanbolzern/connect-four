@@ -1,9 +1,5 @@
 package prg2.connectfour.logic;
 
-import prg2.connectfour.logic.Grid;
-import prg2.connectfour.logic.Player;
-import prg2.connectfour.logic.Color;
-
 public class Game {
     private Grid grid;
     private boolean isFinished;
@@ -12,7 +8,11 @@ public class Game {
     private int playerCount;
 
     public Game() {
-        this.grid = new Grid(10, 5);
+        this(new Grid(10, 5));
+    }
+
+    public Game(Grid grid) {
+        this.grid = grid;
         this.isFinished = false;
         this.playerCount = 2;
         this.players = new Player[this.playerCount];
@@ -35,5 +35,12 @@ public class Game {
 
     public void nextPlayer() {
         this.playerIndex = (this.playerIndex + 1) % this.playerCount;
+    }
+
+    public boolean dropOnColumn(Player player, int column) {
+        if (getActivePlayer() != player)
+            return false;
+
+        return grid.dropOnColumn(player, column);
     }
 }
