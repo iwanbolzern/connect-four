@@ -1,4 +1,4 @@
-package prg.connectfour.ui;
+package prg2.connectfour.ui;
 
 import javax.swing.JPanel;
 
