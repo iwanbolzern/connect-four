@@ -173,6 +173,8 @@ public class NetworkEnv {
 	 * Checks to see if a specific port is available.
 	 *
 	 * @param port the port to check for availability
+	 *
+	 * @return port is available
 	 */
 	public static boolean available(int port) {
 	    ServerSocket ss = null;

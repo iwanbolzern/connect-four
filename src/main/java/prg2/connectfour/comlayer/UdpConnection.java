@@ -103,8 +103,9 @@ public class UdpConnection {
 	/**
 	 * Send a message over the udp socket.
 	 * 
-	 * @param message
-	 *            msg to send
+	 * @param msg message to send
+	 * @param destination destination address
+	 * @param port destination port
 	 */
 	public void sendMessage(Msg msg, InetAddress destination, int port) {
 		msg.setToken(this.token);
