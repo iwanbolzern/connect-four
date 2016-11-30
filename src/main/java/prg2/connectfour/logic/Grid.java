@@ -43,4 +43,12 @@ public class Grid {
     private int getIndex(int x, int y) {
         return (this.width * y) + x;
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }
