@@ -119,7 +119,7 @@ public class SearchPlayerScreen extends JPanel
     }
 
     private void invitePlayer(BasePlayer player) {
-        String newToken = this.networkEnv.sendInvitation(player);
+        String newToken = this.networkEnv.sendInvitation(player, 7, 5); //TODO: ask for playground size
         invitationTokens.put(newToken, player);
     }
 
