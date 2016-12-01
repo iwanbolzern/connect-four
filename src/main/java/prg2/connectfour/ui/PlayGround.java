@@ -16,24 +16,19 @@ import prg2.connectfour.comlayer.BasePlayer;
 import prg2.connectfour.comlayer.NetworkEnv;
 
 public class PlayGround extends JPanel {
-	private JLabel slots[][];
-	private JButton buttons[];
-	
-	private NetworkEnv networkEnv;
-	
-	public PlayGround() {
-        
-	}
-	
-	public void singleInit(int x, int y) {
-		
-	}
-	
-	public void networkInit(int x, int y, NetworkEnv env, String gameToken, BasePlayer player) {
-		this.networkEnv = env;
-		initComponents(x, y);
-	}
-	
+    private JLabel slots[][];
+    private JButton buttons[];
+
+    private NetworkEnv networkEnv;
+
+    public PlayGround(int x, int y) {
+        initComponents(x, y);
+    }
+
+    public void networkInit(NetworkEnv env, String gameToken, BasePlayer player) {
+        this.networkEnv = env;
+    }
+
 	private void initComponents(int x, int y) {
 		this.setLayout(new GridLayout(x, y + 1));
 
@@ -48,8 +43,8 @@ public class PlayGround extends JPanel {
 
                         public void actionPerformed(ActionEvent e) {
                             int a = Integer.parseInt(e.getActionCommand());
-                            
-                            
+
+
 //                            int y = my_grid.find_y(a);//check for space in collumn
 //                            if (y != -1) {
 //                                //sets a place to current player
@@ -78,7 +73,7 @@ public class PlayGround extends JPanel {
             }
         }
 	}
-	
+
 //	 public void showWon() {
 //	        String winner = "player " + currentPlayer + " wins";
 //	        int n = JOptionPane.showConfirmDialog(
