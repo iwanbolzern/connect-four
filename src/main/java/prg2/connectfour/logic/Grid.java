@@ -18,11 +18,13 @@ public class Grid {
     }
 
     public Cell getCellAt(int x, int y) {
-        int pos = getIndex(x, y);
-        if (pos < 0 || pos > this.cells.length)
+        if (x < 0 || x >= this.width)
             return null;
 
-        return cells[pos];
+        if (y < 0 || y >= this.height)
+            return null;
+
+        return cells[getIndex(x, y)];
     }
 
     public boolean dropOnColumn(Player player, int column) {

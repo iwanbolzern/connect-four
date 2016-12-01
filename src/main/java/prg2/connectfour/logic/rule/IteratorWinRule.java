@@ -11,6 +11,9 @@ import java.util.Stack;
 public class IteratorWinRule {
     public static IteratorWinRule Horizontal = new IteratorWinRule(new HorizontalGridIterator());
     public static IteratorWinRule Vertical = new IteratorWinRule(new VerticalGridIterator());
+    public static IteratorWinRule DiagonalRight = new IteratorWinRule(new DiagonalRightGridIterator());
+    public static IteratorWinRule DiagonalLeft = new IteratorWinRule(new DiagonalLeftGridIterator());
+
     private IGridIterator iterator;
 
     private IteratorWinRule(IGridIterator iterator) {
