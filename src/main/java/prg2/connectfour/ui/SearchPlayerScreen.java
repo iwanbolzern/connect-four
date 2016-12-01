@@ -3,15 +3,19 @@ package prg2.connectfour.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import prg2.connectfour.comlayer.BasePlayer;
 import prg2.connectfour.comlayer.InvitationMsg;
@@ -35,8 +39,10 @@ public class SearchPlayerScreen extends JPanel
     private ArrayList<StartGameHandler> startGameListeners = new ArrayList<>();
 
     private JList<String> playerList;
+    private ListSelectionModel listSelectionModel;
     private JScrollPane playerPane;
-    private DefaultListModel<String> playerListModel;
+    private JButton inviteButton;
+    private DefaultListModel playerListModel;
 
     /**
      * The constructor initializes the UI and registers event listeners
@@ -49,23 +55,38 @@ public class SearchPlayerScreen extends JPanel
     
     public void init() {
         this.setLayout(new GridLayout(1, 3));
-
-        // init all ui components here
-        this.playerListModel = new DefaultListModel<>();
-
-        this.playerList = new JList<>(this.playerListModel);
+        this.playerListModel = new DefaultListModel();
+        this.playerList = new JList(playerListModel);
         this.playerList.setLayoutOrientation(JList.VERTICAL);
         this.playerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        this.add(playerList);
 
+        listSelectionModel = this.playerList.getSelectionModel();
+        listSelectionModel.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                add(inviteButton);
+                revalidate();
+            }
+        });
+        
         this.playerPane = new JScrollPane(this.playerList);
         this.add(this.playerPane);
+        
+        this.inviteButton = new JButton("Invite Selected");
+        this.inviteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+               System.out.println(e.getActionCommand());
+            }
+        });
+        revalidate();
 
         // register listeners on network env
         this.networkEnv.addNewPlayerListener(this);
         this.networkEnv.addInvitationListener(this);
         this.networkEnv.addInvitationResponseListener(this);
-
+        
         startSearch();
     }
 
@@ -77,6 +98,7 @@ public class SearchPlayerScreen extends JPanel
     @Override
     public void newPlayerDetected(BasePlayer newPlayer) {
         this.playerListModel.addElement(newPlayer.getName());
+        revalidate();
     }
 
     /**

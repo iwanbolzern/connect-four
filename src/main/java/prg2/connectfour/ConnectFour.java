@@ -34,11 +34,13 @@ public class ConnectFour extends JFrame {
                         initSearchPlayerScreen(playerName);
                         remove(homeScreen);
                         add(searchPlayerScreen);
+                        revalidate();
                     } else if(mode == GameMode.SINGLE) {
                         // TODO: show message box for x,y
                         initSinglePlayGround(7, 5);
                         remove(homeScreen);
                         add(playGround);
+                        revalidate();
                     } else if(mode == GameMode.LOAD_GAME) {
                         // TODO: implement load game
                     } else {
@@ -65,14 +67,16 @@ public class ConnectFour extends JFrame {
                                     initNetworkPlayGround(gameToken, player, x, y);
                                     remove(searchPlayerScreen);
                                     add(playGround);
+                                    revalidate();
                                 }
                             });
                     } else {
                         networkEnv.sendStartGame(player, x, y);
+                        initNetworkPlayGround(gameToken, player, x, y);
+                        remove(searchPlayerScreen);
+                        add(playGround);
+                        revalidate();
                     }
-                    initNetworkPlayGround(gameToken, player, x, y);
-                    remove(searchPlayerScreen);
-                    add(playGround);
                 }
             });
         this.searchPlayerScreen.init();
