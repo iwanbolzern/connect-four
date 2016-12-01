@@ -45,7 +45,7 @@ public class HomeScreen extends JPanel implements ActionListener {
 
     private void onPlayClick(GameMode mode, String playerName) {
         for(PlayHandler listener : playListeners)
-            listener.onPlayClick(mode, playerName);
+            listener.onPlayClicked(mode, playerName);
     }
 
     public void addPlayListener(PlayHandler listener) {
@@ -64,7 +64,7 @@ public class HomeScreen extends JPanel implements ActionListener {
     }
 
     public interface PlayHandler {
-        void onPlayClick(GameMode mode, String playerName);
+        void onPlayClicked(GameMode mode, String playerName);
     }
 
     public enum GameMode {

@@ -10,7 +10,7 @@ import prg2.connectfour.ui.SearchPlayerScreen;
 import prg2.connectfour.ui.HomeScreen.GameMode;
 import prg2.connectfour.comlayer.NetworkEnv;
 
-public class ConnectFour extends JFrame implements PlayHandler {
+public class ConnectFour extends JFrame {
     private NetworkEnv networkEnv;
     
     // Screens
@@ -19,14 +19,14 @@ public class ConnectFour extends JFrame implements PlayHandler {
     private PlayGround playGround;
 
     private ConnectFour() {
-        
+    	init();
     }
     
     private void init() {
     	homeScreen = new HomeScreen();
     	homeScreen.addPlayListener(new HomeScreen.PlayHandler() {
 			@Override
-			public void onPlayClickt(HomeScreen.GameMode mode, String playerName) {
+			public void onPlayClicked(HomeScreen.GameMode mode, String playerName) {
 				String msg = playerName + " has started a " + mode.toString();
 		        JOptionPane.showMessageDialog(null, msg, "information",
 		                                      JOptionPane.INFORMATION_MESSAGE);
