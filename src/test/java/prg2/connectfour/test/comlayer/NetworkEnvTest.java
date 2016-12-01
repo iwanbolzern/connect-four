@@ -26,6 +26,7 @@ public class NetworkEnvTest {
         this.clientTwo.init("Marius");
     }
     
+    @SuppressWarnings("deprecation")
     @Test
     public void searchPlayerTest() {
         lock = new Object();
@@ -42,7 +43,6 @@ public class NetworkEnvTest {
             @Override
             public void newPlayerDetected(BasePlayer newPlayer) {
                 playerOne = newPlayer;
-                lock.notifyAll();
             }
         });
         this.clientTwo.broadcastHelloMsg();

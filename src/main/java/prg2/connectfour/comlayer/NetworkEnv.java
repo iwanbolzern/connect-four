@@ -15,7 +15,7 @@ import prg2.connectfour.utils.Utils;
 public class NetworkEnv {
 
     private static final int lowerPortRange = 50000;
-    private static final int upperPortRange = 60000;
+    private static final int upperPortRange = 50010;
 
     UdpConnection udpConnection;
     String playerName;
@@ -62,12 +62,13 @@ public class NetworkEnv {
     }
 
     private void helloMsgReceived(HelloMsg msg) {
+        System.out.println("Hello Message received" + msg.getName());
         if (!activeConnections.containsKey(msg.getToken())) {
             activeConnections.put(msg.getToken(), new Pair<>(msg.getIpAddress(), msg.getPort()));
             HelloResponseMsg response = new HelloResponseMsg();
             response.setName(playerName);
             response.setPort(udpConnection.getListenPort());
-
+            System.out.println("Hello response sent to " + msg.getIpAddress() + ":" + msg.getPort());
             udpConnection.sendMessage(response, msg.getIpAddress(), msg.getPort());
             onNewPlayerDetected(msg);
         }
@@ -105,6 +106,7 @@ public class NetworkEnv {
     }
 
     public void broadcastHelloMsg() {
+        System.out.println("Broadcast hello message");
         HelloMsg msg = new HelloMsg();
         msg.setName(playerName);
         msg.setPort(udpConnection.getListenPort());
