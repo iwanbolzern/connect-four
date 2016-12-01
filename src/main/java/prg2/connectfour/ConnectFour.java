@@ -4,19 +4,38 @@ import java.awt.Dimension;
 
 import javax.swing.*;
 
-import prg2.connectfour.ui.HomeScreen;
+<<<<<<< .mineimport prg2.connectfour.ui.HomeScreen;
 import prg2.connectfour.ui.HomeScreen.*;
-import prg2.connectfour.ui.PlayGround;
+=======import prg2.connectfour.ui.HomeScreen;
+>>>>>>> .theirsimport prg2.connectfour.ui.PlayGround;
+import prg2.connectfour.ui.SearchPlayerScreen;
+import prg2.connectfour.ui.HomeScreen.GameMode;
 import prg2.connectfour.comlayer.NetworkEnv;
 
 public class ConnectFour extends JFrame implements PlayHandler {
     private NetworkEnv networkEnv;
+    
+    // Screens
+    private HomeScreen homeScreen;
+    private SearchPlayerScreen searchPlayerScreen;
+    private PlayGround playGround;
 
     private ConnectFour() {
-        HomeScreen home = new HomeScreen();
+<<<<<<< .mine        HomeScreen home = new HomeScreen();
         home.addPlayListener(this);
         // add(new PlayGround(10, 10));
         add(home);
+=======        
+>>>>>>> .theirs    }
+    
+    private void init() {
+    	homeScreen = new HomeScreen();
+    	homeScreen.addPlayListener(new HomeScreen.PlayHandler() {
+			@Override
+			public void onPlayClickt(HomeScreen.GameMode mode, String playerName) {
+					
+			}
+		});
     }
 
     public void onPlayClick(GameMode mode, String playerName) {

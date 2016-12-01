@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import prg2.connectfour.utils.Pair;
+import prg2.connectfour.utils.Utils;
 
 public class NetworkEnv {
 	
@@ -115,13 +116,15 @@ public class NetworkEnv {
 			}
 	}
 	
-	public void sendInvitation(BasePlayer player) {
+	public String sendInvitation(BasePlayer player) {
 		checkPlayer(player);
 		InvitationMsg invatation = new InvitationMsg() {{
 			setName(playerName);
+			setInvitationToken(Utils.generateSecureToken());
 		}};
 		Pair<InetAddress, Integer> info = activeConnections.get(player.getToken());
 		this.udpConnection.sendMessage(invatation, info.getLeft(), info.getRight());
+		return invatation.getInvitationToken();
 	}
 	
 	public void sendInvitationResponse(BasePlayer player, boolean wantToPlay) {
@@ -218,6 +221,12 @@ public class NetworkEnv {
 	public void addMoveListener(MoveHandler listener) {
 		moveListeners.add(listener);
 	}
+	public void removeAllFromSearchProcess() {
+		playerListeners.clear();
+		invitationListeners.clear();
+		invitationResponseListeners.clear();
+	}
+	
 	
 	public interface PlayerHandler {
 		void newPlayerDetected(BasePlayer newPlayer);
