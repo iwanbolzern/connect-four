@@ -1,7 +1,11 @@
 package prg2.connectfour.comlayer;
 
-public class MoveMsg extends Msg {
-	private int x;
+import java.io.Serializable;
+
+public class MoveMsg extends Msg implements Serializable {
+    private static final long serialVersionUID = -6056126601687864227L;
+    
+    private int x;
 
 	public int getX() {
 		return x;

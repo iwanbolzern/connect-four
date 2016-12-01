@@ -7,6 +7,9 @@ public class InvitationMsg extends Msg implements Serializable {
 	
 	private String name;
 	private String invitationToken;
+	private int x;
+	private int y;
+	
 
 	public String getName() {
 		return name;
@@ -22,5 +25,21 @@ public class InvitationMsg extends Msg implements Serializable {
 
 	public void setInvitationToken(String token) {
 		this.invitationToken = token;
+	}
+	
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
 	}
 }

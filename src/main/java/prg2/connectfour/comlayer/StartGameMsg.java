@@ -1,7 +1,11 @@
 package prg2.connectfour.comlayer;
 
-public class StartGameMsg extends Msg {
-	private int x;
+import java.io.Serializable;
+
+public class StartGameMsg extends Msg implements Serializable {
+    private static final long serialVersionUID = 1930062221249772807L;
+    
+    private int x;
 	private int y;
 	
 	public int getX() {

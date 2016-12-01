@@ -2,7 +2,7 @@ package prg2.connectfour.comlayer;
 
 import java.io.Serializable;
 
-public class HelloMsg extends Msg  {
+public class HelloMsg extends Msg implements Serializable  {
 	
 	private static final long serialVersionUID = 5626589539568291879L;
 	
