@@ -23,12 +23,12 @@ public abstract class Reduction {
         } else {
             pair = stack.pop();
 
-            if (pair.getLeft() != key) {
+            if (pair.left != key) {
                 stack.push(pair);
                 pair = new Pair<>(key, 0);
             }
 
-            pair = new Pair<>(key, pair.getRight() + 1);
+            pair = new Pair<>(key, pair.right + 1);
         }
 
         stack.push(pair);

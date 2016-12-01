@@ -31,11 +31,11 @@ public class IteratorWinRule {
 
                 while (!stack.empty()) {
                     Pair<Player, Integer> pair = stack.pop();
-                    if (pair.getLeft() == null)
+                    if (pair.left == null)
                         continue;
 
-                    if (pair.getRight() >= 4)
-                        return pair.getLeft();
+                    if (pair.right >= 4)
+                        return pair.left;
                 }
             }
         }

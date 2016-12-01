@@ -23,19 +23,19 @@ public class ReductionTest {
         Pair<String, Integer> pair;
 
         pair = stack.pop();
-        Assert.assertEquals("2", pair.getLeft());
-        Assert.assertEquals((Integer) 1, pair.getRight());
+        Assert.assertEquals("2", pair.left);
+        Assert.assertEquals((Integer) 1, pair.right);
 
         pair = stack.pop();
-        Assert.assertEquals("3", pair.getLeft());
-        Assert.assertEquals((Integer) 4, pair.getRight());
+        Assert.assertEquals("3", pair.left);
+        Assert.assertEquals((Integer) 4, pair.right);
 
         pair = stack.pop();
-        Assert.assertEquals("2", pair.getLeft());
-        Assert.assertEquals((Integer) 1, pair.getRight());
+        Assert.assertEquals("2", pair.left);
+        Assert.assertEquals((Integer) 1, pair.right);
 
         pair = stack.pop();
-        Assert.assertEquals("1", pair.getLeft());
-        Assert.assertEquals((Integer) 2, pair.getRight());
+        Assert.assertEquals("1", pair.left);
+        Assert.assertEquals((Integer) 2, pair.right);
     }
 }
