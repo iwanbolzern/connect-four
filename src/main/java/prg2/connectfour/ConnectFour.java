@@ -76,17 +76,20 @@ public class ConnectFour extends JFrame {
                     add(playGround);
                 }
             });
-        this.searchPlayerScreen.init();
+        // TODO
+        //this.searchPlayerScreen.init();
     }
 
     private void initNetworkPlayGround(String gameToken, BasePlayer player, int x, int y) {
-        this.playGround = new PlayGround();
-        this.playGround.networkInit(x, y, this.networkEnv, gameToken, player);
+        // TODO
+        //this.playGround = new PlayGround();
+        //this.playGround.networkInit(x, y, this.networkEnv, gameToken, player);
     }
 
     private void initSinglePlayGround(int x, int y) {
-        this.playGround = new PlayGround();
-        this.playGround.singleInit(x, y);
+        // TODO
+        //this.playGround = new PlayGround();
+        //this.playGround.singleInit(x, y);
     }
 
     public static void main(String[] args) {
