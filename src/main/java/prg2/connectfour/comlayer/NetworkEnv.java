@@ -20,7 +20,7 @@ public class NetworkEnv {
     UdpConnection udpConnection;
     String playerName;
 
-    private HashMap<String, Pair<InetAddress, Integer>> activeConnections = new HashMap<>();
+    private HashMap<String, BasePlayer> activeConnections = new HashMap<>();
 
     private List<PlayerHandler> playerListeners = new ArrayList<>();
     private List<InvitationHandler> invitationListeners = new ArrayList<>();
@@ -44,14 +44,18 @@ public class NetworkEnv {
                             helloResponseMsgReceived((HelloResponseMsg) msg);
                         } else if (msg instanceof HelloMsg) {
                             helloMsgReceived((HelloMsg) msg);
-                        } else if (msg instanceof InvitationResponseMsg) {
-                            invitationResponseReceived((InvitationResponseMsg) msg);
-                        } else if (msg instanceof InvitationMsg) {
-                            invitationMsgReceived((InvitationMsg) msg);
-                        } else if (msg instanceof StartGameMsg) {
-                            startGameReceived((StartGameMsg) msg);
-                        } else if (msg instanceof MoveMsg) {
-                            moveReceived((MoveMsg) msg);
+                        }
+                        if (activeConnections.containsKey(msg.getToken())) {
+                            msg.setPlayer(activeConnections.get(msg.getToken()));
+                            if (msg instanceof InvitationResponseMsg) {
+                                invitationResponseReceived((InvitationResponseMsg) msg);
+                            } else if (msg instanceof InvitationMsg) {
+                                invitationMsgReceived((InvitationMsg) msg);
+                            } else if (msg instanceof StartGameMsg) {
+                                startGameReceived((StartGameMsg) msg);
+                            } else if (msg instanceof MoveMsg) {
+                                moveReceived((MoveMsg) msg);
+                            }
                         }
                     }
                 });
@@ -64,7 +68,12 @@ public class NetworkEnv {
     private void helloMsgReceived(HelloMsg msg) {
         System.out.println("Hello Message received" + msg.getName());
         if (!activeConnections.containsKey(msg.getToken())) {
-            activeConnections.put(msg.getToken(), new Pair<>(msg.getIpAddress(), msg.getPort()));
+            BasePlayer player = new BasePlayer();
+            player.setName(msg.getName());
+            player.setPort(msg.getPort());
+            player.setInetAdress(msg.getIpAddress());
+            player.setToken(msg.getToken());
+            activeConnections.put(msg.getToken(), player);
             HelloResponseMsg response = new HelloResponseMsg();
             response.setName(playerName);
             response.setPort(udpConnection.getListenPort());
@@ -76,7 +85,12 @@ public class NetworkEnv {
 
     private void helloResponseMsgReceived(HelloResponseMsg msg) {
         if (!activeConnections.containsKey(msg.getToken())) {
-            activeConnections.put(msg.getToken(), new Pair<>(msg.getIpAddress(), msg.getPort()));
+            BasePlayer player = new BasePlayer();
+            player.setName(msg.getName());
+            player.setPort(msg.getPort());
+            player.setInetAdress(msg.getIpAddress());
+            player.setToken(msg.getToken());
+            activeConnections.put(msg.getToken(), player);
             onNewPlayerDetected(msg);
         }
     }
@@ -127,18 +141,17 @@ public class NetworkEnv {
         invatation.setY(y);
         invatation.setInvitationToken(Utils.generateSecureToken());
 
-        Pair<InetAddress, Integer> info = activeConnections.get(player.getToken());
-        this.udpConnection.sendMessage(invatation, info.getLeft(), info.getRight());
+        this.udpConnection.sendMessage(invatation, player.getInetAdress(), player.getPort());
         return invatation.getInvitationToken();
     }
 
-    public void sendInvitationResponse(BasePlayer player, boolean wantToPlay) {
+    public void sendInvitationResponse(BasePlayer player, String invitationToken, boolean wantToPlay) {
         checkPlayer(player);
         InvitationResponseMsg msg = new InvitationResponseMsg();
+        msg.setInvitationToken(invitationToken);
         msg.setInvitationAccepted(wantToPlay);
 
-        Pair<InetAddress, Integer> info = activeConnections.get(player.getToken());
-        this.udpConnection.sendMessage(msg, info.getLeft(), info.getRight());
+        this.udpConnection.sendMessage(msg, player.getInetAdress(), player.getPort());
     }
 
     public void sendStartGame(BasePlayer player, int x, int y) {
@@ -147,8 +160,7 @@ public class NetworkEnv {
         msg.setX(x);
         msg.setY(y);
 
-        Pair<InetAddress, Integer> info = activeConnections.get(player.getToken());
-        this.udpConnection.sendMessage(msg, info.getLeft(), info.getRight());
+        this.udpConnection.sendMessage(msg, player.getInetAdress(), player.getPort());
     }
 
     public void sendMove(BasePlayer player, int x) {
@@ -156,8 +168,7 @@ public class NetworkEnv {
         MoveMsg msg = new MoveMsg();
         msg.setX(x);
 
-        Pair<InetAddress, Integer> info = activeConnections.get(player.getToken());
-        this.udpConnection.sendMessage(msg, info.getLeft(), info.getRight());
+        this.udpConnection.sendMessage(msg, player.getInetAdress(), player.getPort());
     }
 
     private void checkPlayer(BasePlayer player) {

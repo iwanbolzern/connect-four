@@ -44,16 +44,14 @@ public class SearchPlayerScreen extends JPanel
      * starts a search for possible opponents.
      */
     public SearchPlayerScreen(NetworkEnv env) {
-        this.setLayout(new GridLayout(1, 3));
         this.networkEnv = env;
+    }
+    
+    public void init() {
+        this.setLayout(new GridLayout(1, 3));
 
         // init all ui components here
         this.playerListModel = new DefaultListModel<>();
-
-        this.playerListModel.addElement("player 1");
-        this.playerListModel.addElement("player 2");
-        this.playerListModel.addElement("player 3");
-        this.playerListModel.addElement("player 4");
 
         this.playerList = new JList<>(this.playerListModel);
         this.playerList.setLayoutOrientation(JList.VERTICAL);
@@ -78,8 +76,6 @@ public class SearchPlayerScreen extends JPanel
      */
     @Override
     public void newPlayerDetected(BasePlayer newPlayer) {
-        // TODO
-        // this.invitationTokens.put(newPlayer.getInvitationToken(), newPlayer);
         this.playerListModel.addElement(newPlayer.getName());
     }
 
@@ -96,10 +92,11 @@ public class SearchPlayerScreen extends JPanel
         int result = JOptionPane.showConfirmDialog(null, str, "Invitation",
                                                    JOptionPane.YES_NO_OPTION,
                                                    JOptionPane.QUESTION_MESSAGE);
-        if (this.invitationTokens.containsKey(msg.getInvitationToken())) {
-            BasePlayer opponent = this.invitationTokens.get(msg.getInvitationToken());
-            this.networkEnv.sendInvitationResponse(opponent, result == 0 ? true : false);
-        }
+        if(result == 0)
+            this.onStartGame(msg.getInvitationToken(), msg.getPlayer(), false);
+        this.networkEnv.sendInvitationResponse(msg.getPlayer(), 
+                msg.getInvitationToken(), 
+                result == 0 ? true : false);
     }
 
     /**
@@ -110,7 +107,7 @@ public class SearchPlayerScreen extends JPanel
     public void invitationResponseReceived(InvitationResponseMsg msg) {
         if(this.invitationTokens.containsKey(msg.getInvitationToken())) {
             BasePlayer opponent = this.invitationTokens.get(msg.getInvitationToken());
-            this.onStartGame(msg.getInvitationToken(), opponent);
+            this.onStartGame(msg.getInvitationToken(), opponent, true);
         }
     }
 
@@ -123,9 +120,9 @@ public class SearchPlayerScreen extends JPanel
         invitationTokens.put(newToken, player);
     }
 
-    private void onStartGame(String gameToken, BasePlayer player) {
+    private void onStartGame(String gameToken, BasePlayer player, boolean hasToSendStart) {
         for(StartGameHandler listener : this.startGameListeners)
-            listener.startGame(gameToken, player, true, 7, 7);
+            listener.startGame(gameToken, player, hasToSendStart, 7, 5);
     }
 
     public void addStartGameListener(StartGameHandler listener) {
@@ -133,6 +130,6 @@ public class SearchPlayerScreen extends JPanel
     }
 
     public interface StartGameHandler {
-        void startGame(String gameToken, BasePlayer player, boolean isStartSend, int x, int y);
+        void startGame(String gameToken, BasePlayer player, boolean hasToSendStart, int x, int y);
     }
 }

@@ -44,9 +44,6 @@ public class ConnectFour extends JFrame {
                     } else {
                         throw new IllegalArgumentException("Game mode not known");
                     }
-                    //				String msg = playerName + " has started a " + mode.toString();
-                    //		        JOptionPane.showMessageDialog(null, msg, "information",
-                    //		                                      JOptionPane.INFORMATION_MESSAGE);
                 }
             });
     }
@@ -60,8 +57,8 @@ public class ConnectFour extends JFrame {
         this.searchPlayerScreen = new SearchPlayerScreen(this.networkEnv);
         this.searchPlayerScreen.addStartGameListener(new SearchPlayerScreen.StartGameHandler() {
                 @Override
-                public void startGame(String gameToken, BasePlayer player, boolean isStartSend, int x, int y) {
-                    if(!isStartSend) {
+                public void startGame(String gameToken, BasePlayer player, boolean hasToSendStart, int x, int y) {
+                    if(!hasToSendStart) {
                         networkEnv.addStartGameListener(new NetworkEnv.StartGameHandler() {
                                 @Override
                                 public void startGame(int x, int y) {
@@ -70,20 +67,20 @@ public class ConnectFour extends JFrame {
                                     add(playGround);
                                 }
                             });
+                    } else {
+                        networkEnv.sendStartGame(player, x, y);
                     }
                     initNetworkPlayGround(gameToken, player, x, y);
                     remove(searchPlayerScreen);
                     add(playGround);
                 }
             });
-        // TODO
-        //this.searchPlayerScreen.init();
+        this.searchPlayerScreen.init();
     }
 
     private void initNetworkPlayGround(String gameToken, BasePlayer player, int x, int y) {
-        // TODO
-        //this.playGround = new PlayGround();
-        //this.playGround.networkInit(x, y, this.networkEnv, gameToken, player);
+        this.playGround = new PlayGround(x, y);
+        this.playGround.networkInit(this.networkEnv, gameToken, player);
     }
 
     private void initSinglePlayGround(int x, int y) {

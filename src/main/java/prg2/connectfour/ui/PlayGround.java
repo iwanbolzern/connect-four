@@ -27,6 +27,12 @@ public class PlayGround extends JPanel {
 
     public void networkInit(NetworkEnv env, String gameToken, BasePlayer player) {
         this.networkEnv = env;
+        this.networkEnv.addMoveListener(new NetworkEnv.MoveHandler() {
+            @Override
+            public void movePerformed(int x) {
+                
+            }
+        });
     }
 
 	private void initComponents(int x, int y) {
