@@ -20,7 +20,7 @@ public class IteratorWinRule {
         this.iterator = iterator;
     }
 
-    public boolean isWin(Grid grid) {
+    public Player playerWon(Grid grid) {
         int width = grid.getWidth();
         int height = grid.getHeight();
 
@@ -31,12 +31,15 @@ public class IteratorWinRule {
 
                 while (!stack.empty()) {
                     Pair<Player, Integer> pair = stack.pop();
+                    if (pair.getLeft() == null)
+                        continue;
+
                     if (pair.getRight() >= 4)
-                        return true;
+                        return pair.getLeft();
                 }
             }
         }
 
-        return false;
+        return null;
     }
 }

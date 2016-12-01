@@ -49,8 +49,8 @@ public class IteratorWinRuleTest {
                 "01111",
                 "22121");
 
-        boolean result = IteratorWinRule.Horizontal.isWin(this.grid);
-        Assert.assertTrue(result);
+        Player result = IteratorWinRule.Horizontal.playerWon(this.grid);
+        Assert.assertEquals(this.players[0], result);
     }
 
     @Test
@@ -62,8 +62,8 @@ public class IteratorWinRuleTest {
                 "01211",
                 "21221");
 
-        boolean result = IteratorWinRule.Vertical.isWin(this.grid);
-        Assert.assertTrue(result);
+        Player result = IteratorWinRule.Vertical.playerWon(this.grid);
+        Assert.assertEquals(this.players[1], result);
     }
 
     @Test
@@ -75,8 +75,8 @@ public class IteratorWinRuleTest {
                 "01211",
                 "22121");
 
-        boolean result = IteratorWinRule.DiagonalRight.isWin(this.grid);
-        Assert.assertTrue(result);
+        Player result = IteratorWinRule.DiagonalRight.playerWon(this.grid);
+        Assert.assertEquals(this.players[1], result);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class IteratorWinRuleTest {
                 "11211",
                 "21121");
 
-        boolean result = IteratorWinRule.DiagonalLeft.isWin(this.grid);
-        Assert.assertTrue(result);
+        Player result = IteratorWinRule.DiagonalLeft.playerWon(this.grid);
+        Assert.assertEquals(this.players[1], result);
     }
 }
