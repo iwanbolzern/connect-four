@@ -65,4 +65,30 @@ public class IteratorWinRuleTest {
         boolean result = IteratorWinRule.Vertical.isWin(this.grid);
         Assert.assertTrue(result);
     }
+
+    @Test
+    public void testDetectsDiagonalRightWin() {
+        prepareGrid(
+                "00000",
+                "00002",
+                "01021",
+                "01211",
+                "22121");
+
+        boolean result = IteratorWinRule.DiagonalRight.isWin(this.grid);
+        Assert.assertTrue(result);
+    }
+
+    @Test
+    public void testDetectsDiagonalLeftWin() {
+        prepareGrid(
+                "00000",
+                "20000",
+                "12001",
+                "11211",
+                "21121");
+
+        boolean result = IteratorWinRule.DiagonalLeft.isWin(this.grid);
+        Assert.assertTrue(result);
+    }
 }
