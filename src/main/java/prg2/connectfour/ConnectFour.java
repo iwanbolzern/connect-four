@@ -4,14 +4,25 @@ import java.awt.Dimension;
 
 import javax.swing.*;
 
+import prg2.connectfour.ui.HomeScreen;
+import prg2.connectfour.ui.HomeScreen.*;
 import prg2.connectfour.ui.PlayGround;
 import prg2.connectfour.comlayer.NetworkEnv;
 
-public class ConnectFour extends JFrame {
+public class ConnectFour extends JFrame implements PlayHandler {
     private NetworkEnv networkEnv;
 
     private ConnectFour() {
-        add(new PlayGround(10, 10));
+        HomeScreen home = new HomeScreen();
+        home.addPlayListener(this);
+        // add(new PlayGround(10, 10));
+        add(home);
+    }
+
+    public void onPlayClick(GameMode mode, String playerName) {
+        String msg = playerName + " has started a " + mode.toString();
+        JOptionPane.showMessageDialog(null, msg, "information",
+                                      JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void main(String[] args) {
