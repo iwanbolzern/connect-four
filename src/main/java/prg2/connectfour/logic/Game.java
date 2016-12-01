@@ -1,46 +1,56 @@
 package prg2.connectfour.logic;
 
+import java.util.ArrayList;
+
 public class Game {
     private Grid grid;
-    private boolean isFinished;
-    private Player[] players;
-    private int playerIndex;
-    private int playerCount;
+    private GameState state;
+    private ArrayList<DrawListener> drawHandlers = new ArrayList<>();
 
-    public Game() {
-        this(new Grid(10, 5));
+    public Game(int x, int y) {
+        this.grid = new Grid(x, y);
+        this.state = GameState.RED_TURN;
     }
 
-    public Game(Grid grid) {
-        this.grid = grid;
-        this.isFinished = false;
-        this.playerCount = 2;
-        this.players = new Player[this.playerCount];
-
-        this.players[0] = new Player("Player 1", Color.Yellow);
-        this.players[1] = new Player("Player 2", Color.Red);
+    public void addDrawEventListener(DrawListener handler) {
+        this.drawHandlers.add(handler);
     }
 
-    public boolean isFinished() {
-        return this.isFinished;
+    public void draw(Player player, int x, int y) {
+        for (DrawListener handler : this.drawHandlers) {
+            handler.onDraw(player, x, y);
+        }
     }
 
-    public Player getWinner() {
-        return null;
+    public GameState dropOnColumn(Player player, int x) {
+        switch (this.state) {
+        case RED_TURN:
+            if (player == Player.RED) {
+                int y = grid.dropOnColumn(player, x);
+                if (y > 0) {
+                    this.state = GameState.YELLOW_TURN;
+                    this.draw(player, x, y);
+                }
+            }
+            break;
+        case YELLOW_TURN:
+            if (player == Player.YELLOW) {
+                int y = grid.dropOnColumn(player, x);
+                if (y > 0) {
+                    this.state = GameState.RED_TURN;
+                    this.draw(player, x, y);
+                }
+            }
+            break;
+        }
+        return this.state;
     }
 
-    public Player getActivePlayer() {
-        return this.players[playerIndex];
+    public enum GameState {
+        RED_TURN, YELLOW_TURN, RED_WON, YELLOW_WON, DRAW
     }
 
-    public void nextPlayer() {
-        this.playerIndex = (this.playerIndex + 1) % this.playerCount;
-    }
-
-    public boolean dropOnColumn(Player player, int column) {
-        if (getActivePlayer() != player)
-            return false;
-
-        return grid.dropOnColumn(player, column);
+    public interface DrawListener {
+        void onDraw(Player player, int x, int y);
     }
 }

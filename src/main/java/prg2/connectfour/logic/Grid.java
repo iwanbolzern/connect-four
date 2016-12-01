@@ -27,19 +27,19 @@ public class Grid {
         return cells[getIndex(x, y)];
     }
 
-    public boolean dropOnColumn(Player player, int column) {
+    public int dropOnColumn(Player player, int column) {
         if (column < 0 || column > this.width)
-            return false;
+            return -1;
 
         for (int y = 0; y < this.height; ++y) {
             int pos = getIndex(column, y);
             if (cells[pos].getOwner() == null) {
                 cells[pos].setOwner(player);
-                return true;
+                return y;
             }
         }
 
-        return false;
+        return -1;
     }
 
     private int getIndex(int x, int y) {

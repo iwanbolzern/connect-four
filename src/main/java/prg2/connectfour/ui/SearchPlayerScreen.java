@@ -78,7 +78,7 @@ public class SearchPlayerScreen extends JPanel
      */
     @Override
     public void newPlayerDetected(BasePlayer newPlayer) {
-        this.invitationTokens.put(newPlayer.getInvitationToken(), newPlayer);
+        this.invitationTokens.put(newPlayer.getToken(), newPlayer);
         this.playerListModel.addElement(newPlayer.getName());
     }
 
