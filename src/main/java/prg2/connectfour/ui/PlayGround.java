@@ -12,12 +12,30 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import prg2.connectfour.comlayer.BasePlayer;
+import prg2.connectfour.comlayer.NetworkEnv;
+
 public class PlayGround extends JPanel {
 	private JLabel slots[][];
 	private JButton buttons[];
 	
-	public PlayGround(int x, int y) {
-        this.setLayout(new GridLayout(x, y + 1));
+	private NetworkEnv networkEnv;
+	
+	public PlayGround() {
+        
+	}
+	
+	public void singleInit(int x, int y) {
+		
+	}
+	
+	public void networkInit(int x, int y, NetworkEnv env, String gameToken, BasePlayer player) {
+		this.networkEnv = env;
+		initComponents(x, y);
+	}
+	
+	private void initComponents(int x, int y) {
+		this.setLayout(new GridLayout(x, y + 1));
 
         this.slots = new JLabel[x][y];
         this.buttons = new JButton[x];

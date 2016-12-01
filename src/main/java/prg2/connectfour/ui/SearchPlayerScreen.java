@@ -46,7 +46,6 @@ public class SearchPlayerScreen extends JPanel {
 			@Override
 			public void invitationReceived(InvitationMsg msg) {
 				// show popup on new invitation
-				
 			}
 		});
 		this.networkEnv.addInvitationResponseListener(new NetworkEnv.InvitationResponseHandler() {
