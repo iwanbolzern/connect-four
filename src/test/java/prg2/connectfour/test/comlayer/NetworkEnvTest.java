@@ -4,59 +4,58 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import prg2.connectfour.comlayer.BasePlayer;
 import prg2.connectfour.comlayer.NetworkEnv;
+
+import java.util.concurrent.Semaphore;
 
 public class NetworkEnvTest {
     private NetworkEnv clientOne;
     private NetworkEnv clientTwo;
     private BasePlayer playerOne;
     private BasePlayer playerTwo;
-    
-    private Object lock;
-    
+
     @Before
     public void setup() {
         this.clientOne = new NetworkEnv();
         this.clientTwo = new NetworkEnv();
-        
+
         this.clientOne.init("Iwan");
         this.clientTwo.init("Marius");
     }
-    
+
     @Test
     @Ignore
-    public void searchPlayerTest() {
-        lock = new Object();
-        
+    public void searchPlayerTest() throws InterruptedException {
+        Semaphore semaphore = new Semaphore(2);
+
         this.clientOne.addNewPlayerListener(new NetworkEnv.PlayerHandler() {
             @Override
             public void newPlayerDetected(BasePlayer newPlayer) {
                 playerTwo = newPlayer;
+                semaphore.release();
             }
         });
-        this.clientOne.broadcastHelloMsg();
-        
+
         this.clientTwo.addNewPlayerListener(new NetworkEnv.PlayerHandler() {
             @Override
             public void newPlayerDetected(BasePlayer newPlayer) {
                 playerOne = newPlayer;
+                semaphore.release();
             }
         });
+
+        semaphore.acquire();
+        semaphore.acquire();
+
+        this.clientOne.broadcastHelloMsg();
         this.clientTwo.broadcastHelloMsg();
-        
-        try {
-            synchronized (lock) {
-                lock.wait(10000);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        
+
+        semaphore.acquire();
+
         Assert.assertNotNull(playerOne);
         Assert.assertNotNull(playerTwo);
-        
+
         Assert.assertEquals(playerOne.getName(), "Iwan");
         Assert.assertEquals(playerTwo.getName(), "Marius");
     }
