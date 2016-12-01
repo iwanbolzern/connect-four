@@ -1,5 +1,7 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 // Apply the application plugin and set main class
 apply plugin: 'application'
