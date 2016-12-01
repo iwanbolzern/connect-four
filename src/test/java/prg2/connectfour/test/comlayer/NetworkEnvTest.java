@@ -1,8 +1,6 @@
 package prg2.connectfour.test.comlayer;
 
-import static org.junit.Assert.*;
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,7 +24,6 @@ public class NetworkEnvTest {
         this.clientTwo.init("Marius");
     }
     
-    @SuppressWarnings("deprecation")
     @Test
     public void searchPlayerTest() {
         lock = new Object();
