@@ -1,15 +1,21 @@
 package prg2.connectfour.utils;
 
 import java.util.Stack;
+import java.util.function.Function;
 
-public class Reduction<K> {
-    private Stack<Pair<K, Integer>> stack;
+public abstract class Reduction {
+    public static <T, K> Stack<Pair<K, Integer>> reduceList(Iterable<T> iterable, Function<T, K> keySelector) {
+        Stack<Pair<K, Integer>> stack = new Stack<>();
 
-    public Reduction() {
-        this.stack = new Stack<>();
+        for (T item : iterable) {
+            K key = keySelector.apply(item);
+            add(stack, key);
+        }
+
+        return stack;
     }
 
-    public void add(K key) {
+    private static <K> void add(Stack<Pair<K, Integer>> stack, K key) {
         Pair<K, Integer> pair;
 
         if (stack.isEmpty()) {
@@ -26,9 +32,5 @@ public class Reduction<K> {
         }
 
         stack.push(pair);
-    }
-
-    public Stack<Pair<K, Integer>> getStack() {
-        return stack;
     }
 }
