@@ -29,6 +29,5 @@ gradle-app.setting
 
 # IntelliJ IDEA
 .idea
-
 #eclipse
 .settings
