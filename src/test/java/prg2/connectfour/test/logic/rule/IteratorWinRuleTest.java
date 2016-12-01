@@ -2,23 +2,20 @@ package prg2.connectfour.test.logic.rule;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import prg2.connectfour.logic.Color;
 import prg2.connectfour.logic.Grid;
 import prg2.connectfour.logic.Player;
-import prg2.connectfour.logic.rule.WinRule;
+import prg2.connectfour.logic.rule.IteratorWinRule;
 
-public class WinRuleTest {
+public class IteratorWinRuleTest {
     private static final int GRID_WIDTH = 5;
     private static final int GRID_HEIGHT = 5;
-    private WinRule subject;
     private Grid grid;
     private Player[] players;
 
     @Before
     public void setup() {
-        this.subject = new WinRule();
         this.grid = new Grid(GRID_WIDTH, GRID_HEIGHT);
         this.players = new Player[2];
         this.players[0] = new Player("Test Player 1", Color.Red);
@@ -52,7 +49,20 @@ public class WinRuleTest {
                 "01111",
                 "22121");
 
-        boolean result = WinRule.hasWon(this.grid);
+        boolean result = IteratorWinRule.Horizontal.isWin(this.grid);
+        Assert.assertTrue(result);
+    }
+
+    @Test
+    public void testDetectsVerticalWin() {
+        prepareGrid(
+                "00000",
+                "00200",
+                "01210",
+                "01211",
+                "21221");
+
+        boolean result = IteratorWinRule.Vertical.isWin(this.grid);
         Assert.assertTrue(result);
     }
 }
