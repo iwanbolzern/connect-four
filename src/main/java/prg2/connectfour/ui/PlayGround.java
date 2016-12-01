@@ -14,6 +14,9 @@ import javax.swing.border.LineBorder;
 
 import prg2.connectfour.comlayer.BasePlayer;
 import prg2.connectfour.comlayer.NetworkEnv;
+import prg2.connectfour.logic.GameFactory;
+import prg2.connectfour.logic.Grid;
+import prg2.connectfour.logic.Player;
 
 public class PlayGround extends JPanel {
     private JLabel slots[][];

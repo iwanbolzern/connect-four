@@ -3,21 +3,26 @@ package prg2.connectfour.test.logic;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import prg2.connectfour.logic.Cell;
-import prg2.connectfour.logic.Game;
-import prg2.connectfour.logic.Grid;
-import prg2.connectfour.logic.Player;
+import prg2.connectfour.logic.*;
 
 public class GameTest {
     private final int GRID_HEIGHT = 5;
     private final int GRID_WIDTH = 10;
     private Game subject;
     private Grid grid;
+    private Player[] players;
 
     @Before
     public void setup() {
         this.grid = new Grid(GRID_WIDTH, GRID_HEIGHT);
-        this.subject = new Game(grid);
+        this.players = new Player[2];
+        this.players[0] = new Player("Player 1", Color.Yellow);
+        this.players[1] = new Player("Player 2", Color.Red);
+        this.subject = GameFactory
+                .create()
+                .withGrid(this.grid)
+                .withPlayers(this.players)
+                .finish();
     }
 
     @Test
@@ -32,19 +37,19 @@ public class GameTest {
         Player cur = subject.getActivePlayer();
 
         Assert.assertNotNull(cur);
-        Assert.assertEquals(cur.getName(), "Player 1");
+        Assert.assertEquals(players[0], cur);
 
         subject.nextPlayer();
         cur = subject.getActivePlayer();
 
         Assert.assertNotNull(cur);
-        Assert.assertEquals(cur.getName(), "Player 2");
+        Assert.assertEquals(players[1], cur);
 
         subject.nextPlayer();
         cur = subject.getActivePlayer();
 
         Assert.assertNotNull(cur);
-        Assert.assertEquals(cur.getName(), "Player 1");
+        Assert.assertEquals(players[0], cur);
     }
 
     @Test

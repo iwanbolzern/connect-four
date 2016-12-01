@@ -7,18 +7,11 @@ public class Game {
     private int playerIndex;
     private int playerCount;
 
-    public Game() {
-        this(new Grid(10, 5));
-    }
-
-    public Game(Grid grid) {
+    Game(Player[] players, Grid grid) {
         this.grid = grid;
         this.isFinished = false;
-        this.playerCount = 2;
-        this.players = new Player[this.playerCount];
-
-        this.players[0] = new Player("Player 1", Color.Yellow);
-        this.players[1] = new Player("Player 2", Color.Red);
+        this.playerCount = players.length;
+        this.players = players;
     }
 
     public boolean isFinished() {
