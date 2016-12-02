@@ -115,8 +115,8 @@ public class NetworkEnv {
     }
 
     private void moveReceived(MoveMsg msg) {
-        for (MoveHandler listener : this.moveListeners) {
-            listener.movePerformed(msg.getX());
+        for(int i = 0; i < this.moveListeners.size(); i++) {
+            this.moveListeners.get(i).movePerformed(msg.getX());
         }
     }
 
