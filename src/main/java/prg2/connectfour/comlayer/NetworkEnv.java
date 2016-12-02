@@ -146,13 +146,15 @@ public class NetworkEnv {
         return invatation.getInvitationToken();
     }
 
-    public void sendInvitationResponse(NetworkPlayer player, String invitationToken, boolean wantToPlay) {
-        checkPlayer(player);
+    public void sendInvitationResponse(InvitationMsg invitation, boolean wantToPlay) {
+        checkPlayer(invitation.getPlayer());
         InvitationResponseMsg msg = new InvitationResponseMsg();
-        msg.setInvitationToken(invitationToken);
+        msg.setX(invitation.getX());
+        msg.setY(invitation.getY());
+        msg.setInvitationToken(invitation.getInvitationToken());
         msg.setInvitationAccepted(wantToPlay);
 
-        this.udpConnection.sendMessage(msg, player.getInetAdress(), player.getPort());
+        this.udpConnection.sendMessage(msg, invitation.getPlayer().getInetAdress(), invitation.getPlayer().getPort());
     }
 
     public void sendStartGame(NetworkPlayer player, int x, int y) {

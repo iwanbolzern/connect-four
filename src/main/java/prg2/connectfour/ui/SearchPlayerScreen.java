@@ -130,9 +130,8 @@ public class SearchPlayerScreen extends JPanel
                                                    JOptionPane.YES_NO_OPTION,
                                                    JOptionPane.QUESTION_MESSAGE);
         if(result == 0)
-            this.onStartGame(msg.getInvitationToken(), msg.getPlayer(), false);
-        this.networkEnv.sendInvitationResponse(msg.getPlayer(), 
-                msg.getInvitationToken(), 
+            this.onStartGame(msg.getInvitationToken(), msg.getPlayer(), false, msg.getX(), msg.getY());
+        this.networkEnv.sendInvitationResponse(msg, 
                 result == 0 ? true : false);
     }
 
@@ -144,7 +143,7 @@ public class SearchPlayerScreen extends JPanel
     public void invitationResponseReceived(InvitationResponseMsg msg) {
         if(this.invitationTokens.containsKey(msg.getInvitationToken())) {
             NetworkPlayer opponent = this.invitationTokens.get(msg.getInvitationToken());
-            this.onStartGame(msg.getInvitationToken(), opponent, true);
+            this.onStartGame(msg.getInvitationToken(), opponent, true, msg.getX(), msg.getY());
         }
     }
 
@@ -152,9 +151,9 @@ public class SearchPlayerScreen extends JPanel
         this.networkEnv.broadcastHelloMsg();
     }
 
-    private void onStartGame(String gameToken, NetworkPlayer player, boolean hasToSendStart) {
+    private void onStartGame(String gameToken, NetworkPlayer player, boolean hasToSendStart, int x, int y) {
         for(StartGameHandler listener : this.startGameListeners)
-            listener.startGame(gameToken, player, hasToSendStart, 7, 5);
+            listener.startGame(gameToken, player, hasToSendStart, x, y);
     }
 
     public void addStartGameListener(StartGameHandler listener) {

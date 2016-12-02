@@ -66,7 +66,7 @@ public class ConnectFour extends JFrame {
                         networkEnv.addStartGameListener(new NetworkEnv.StartGameHandler() {
                                 @Override
                                 public void startGame(int x, int y) {
-                                    initNetworkPlayGround(gameToken, player, x, y);
+                                    initNetworkPlayGround(gameToken, player, x, y, true);
                                     remove(searchPlayerScreen);
                                     add(playGround);
                                     revalidate();
@@ -74,7 +74,7 @@ public class ConnectFour extends JFrame {
                             });
                     } else {
                         networkEnv.sendStartGame(player, x, y);
-                        initNetworkPlayGround(gameToken, player, x, y);
+                        initNetworkPlayGround(gameToken, player, x, y, false);
                         remove(searchPlayerScreen);
                         add(playGround);
                         revalidate();
@@ -84,9 +84,9 @@ public class ConnectFour extends JFrame {
         this.searchPlayerScreen.init();
     }
 
-    private void initNetworkPlayGround(String gameToken, NetworkPlayer player, int x, int y) {
+    private void initNetworkPlayGround(String gameToken, NetworkPlayer player, int x, int y, boolean canIStart) {
         this.playGround = new PlayGround(x, y, name);
-        this.playGround.networkInit(this.networkEnv, gameToken, player);
+        this.playGround.networkInit(this.networkEnv, gameToken, player, canIStart);
     }
 
     private void initSinglePlayGround(int x, int y) {
