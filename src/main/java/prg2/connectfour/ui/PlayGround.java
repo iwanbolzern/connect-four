@@ -73,7 +73,7 @@ public class PlayGround extends JPanel implements MoveHandler {
             Player activePlayer = this.game.getActivePlayer();
             if (activePlayer instanceof NetworkPlayer) {
                 disableButtons();
-                this.activePlayerLabel.setText("Der andere ist am zug");
+                this.activePlayerLabel.setText("Opponent's turn");
                 this.networkEnv.addMoveListener(this);
             } else if (activePlayer instanceof GameTheory) {
                 disableButtons();
@@ -81,7 +81,7 @@ public class PlayGround extends JPanel implements MoveHandler {
                 this.game.dropOnColumn(nextMove);
                 processNext();
             } else if (activePlayer instanceof Player) {
-                this.activePlayerLabel.setText("Du bist am zug");
+                this.activePlayerLabel.setText("Your turn");
                 enableButtons();
             }
         } else {
@@ -160,14 +160,13 @@ public class PlayGround extends JPanel implements MoveHandler {
                 if (cell.getOwner() != null) {
                     if (cell.getOwner().getColor() == Color.Red) {
                         slots[row][column].setBackground(java.awt.Color.RED);
-                        slots[row][column].setText("Rot");// .setBackground(java.awt.Color.RED);
+                        slots[row][column].setText("Red");
                     } else if (cell.getOwner().getColor() == Color.Yellow) {
                         slots[row][column].setBackground(java.awt.Color.YELLOW);
-                        slots[row][column].setText("yellow");
+                        slots[row][column].setText("Yellow");
                     } else
-                        throw new IllegalArgumentException("Player Color not known");
+                        throw new IllegalArgumentException("Player color unknown");
                 }
-                // panelHolder[row][column] =
                 this.gridPanel.add(slots[row][column]);
             }
         }
@@ -183,11 +182,11 @@ public class PlayGround extends JPanel implements MoveHandler {
     public void showFinish() {
         String msg, title;
         if (this.game.getWinner() instanceof NetworkPlayer) {
-            msg = this.game.getWinner().getName() + " is much better then you. Go home and cry";
-            title = "Looser";
+            msg = this.game.getWinner().getName() + " is much better than you. Go home and cry.";
+            title = "Loser";
         } else if (this.game.getWinner() instanceof GameTheory) {
-            msg = "Realy, you're worser then a computer";
-            title = "Looser";
+            msg = "Really, you're worse than a computer.";
+            title = "Loser";
         } else {
             msg = "Well done!";
             title = "Winner";
@@ -195,20 +194,4 @@ public class PlayGround extends JPanel implements MoveHandler {
         JOptionPane.showMessageDialog(this, msg, title, JOptionPane.INFORMATION_MESSAGE);
         
     }
-    //
-    // public void showDraw() {
-    // String winner = "draw game";
-    // int n = JOptionPane.showConfirmDialog(
-    // frame,
-    // "new game?",
-    // winner,
-    // JOptionPane.YES_NO_OPTION);
-    // if (n < 1) {
-    // frame.dispose();
-    // newGame = true;
-    // } else {
-    // frame.dispose();
-    // quit = true;
-    // }
-    // }
 }
