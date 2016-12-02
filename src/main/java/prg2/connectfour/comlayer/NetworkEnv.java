@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import prg2.connectfour.logic.Color;
 import prg2.connectfour.utils.Pair;
 import prg2.connectfour.utils.Utils;
 
@@ -20,7 +21,7 @@ public class NetworkEnv {
     UdpConnection udpConnection;
     String playerName;
 
-    private HashMap<String, BasePlayer> activeConnections = new HashMap<>();
+    private HashMap<String, NetworkPlayer> activeConnections = new HashMap<>();
 
     private List<PlayerHandler> playerListeners = new ArrayList<>();
     private List<InvitationHandler> invitationListeners = new ArrayList<>();
@@ -68,30 +69,30 @@ public class NetworkEnv {
     private void helloMsgReceived(HelloMsg msg) {
         System.out.println("Hello Message received" + msg.getName());
         if (!activeConnections.containsKey(msg.getToken())) {
-            BasePlayer player = new BasePlayer();
-            player.setName(msg.getName());
+            NetworkPlayer player = new NetworkPlayer(msg.getName(), Color.Yellow);
             player.setPort(msg.getPort());
             player.setInetAdress(msg.getIpAddress());
             player.setToken(msg.getToken());
+            msg.setPlayer(player);
             activeConnections.put(msg.getToken(), player);
             HelloResponseMsg response = new HelloResponseMsg();
             response.setName(playerName);
             response.setPort(udpConnection.getListenPort());
             System.out.println("Hello response sent to " + msg.getIpAddress() + ":" + msg.getPort());
             udpConnection.sendMessage(response, msg.getIpAddress(), msg.getPort());
-            onNewPlayerDetected(msg);
+            onNewPlayerDetected(player);
         }
     }
 
     private void helloResponseMsgReceived(HelloResponseMsg msg) {
         if (!activeConnections.containsKey(msg.getToken())) {
-            BasePlayer player = new BasePlayer();
-            player.setName(msg.getName());
+            NetworkPlayer player = new NetworkPlayer(msg.getName(), Color.Yellow);
             player.setPort(msg.getPort());
             player.setInetAdress(msg.getIpAddress());
             player.setToken(msg.getToken());
+            msg.setPlayer(player);
             activeConnections.put(msg.getToken(), player);
-            onNewPlayerDetected(msg);
+            onNewPlayerDetected(player);
         }
     }
 
@@ -133,7 +134,7 @@ public class NetworkEnv {
             }
     }
 
-    public String sendInvitation(BasePlayer player, int x, int y) {
+    public String sendInvitation(NetworkPlayer player, int x, int y) {
         checkPlayer(player);
         InvitationMsg invatation = new InvitationMsg();
         invatation.setName(playerName);
@@ -145,7 +146,7 @@ public class NetworkEnv {
         return invatation.getInvitationToken();
     }
 
-    public void sendInvitationResponse(BasePlayer player, String invitationToken, boolean wantToPlay) {
+    public void sendInvitationResponse(NetworkPlayer player, String invitationToken, boolean wantToPlay) {
         checkPlayer(player);
         InvitationResponseMsg msg = new InvitationResponseMsg();
         msg.setInvitationToken(invitationToken);
@@ -154,7 +155,7 @@ public class NetworkEnv {
         this.udpConnection.sendMessage(msg, player.getInetAdress(), player.getPort());
     }
 
-    public void sendStartGame(BasePlayer player, int x, int y) {
+    public void sendStartGame(NetworkPlayer player, int x, int y) {
         checkPlayer(player);
         StartGameMsg msg = new StartGameMsg();
         msg.setX(x);
@@ -163,7 +164,7 @@ public class NetworkEnv {
         this.udpConnection.sendMessage(msg, player.getInetAdress(), player.getPort());
     }
 
-    public void sendMove(BasePlayer player, int x) {
+    public void sendMove(NetworkPlayer player, int x) {
         checkPlayer(player);
         MoveMsg msg = new MoveMsg();
         msg.setX(x);
@@ -171,19 +172,13 @@ public class NetworkEnv {
         this.udpConnection.sendMessage(msg, player.getInetAdress(), player.getPort());
     }
 
-    private void checkPlayer(BasePlayer player) {
+    private void checkPlayer(NetworkPlayer player) {
         if (!activeConnections.containsKey(player.getToken())) {
             throw new IllegalArgumentException("Invalid token passed");
         }
     }
 
-    private void onNewPlayerDetected(HelloMsg helloMsg) {
-        BasePlayer newPlayer = new BasePlayer() {
-            {
-                setName(helloMsg.getName());
-                setToken(helloMsg.getToken());
-            }
-        };
+    private void onNewPlayerDetected(NetworkPlayer newPlayer) {
         for (PlayerHandler listener : this.playerListeners) {
             listener.newPlayerDetected(newPlayer);
         }
@@ -243,6 +238,10 @@ public class NetworkEnv {
     public void addMoveListener(MoveHandler listener) {
         moveListeners.add(listener);
     }
+    
+    public void removeAllMoveListeners() {
+        moveListeners.clear();
+    }
 
     public void removeAllFromSearchProcess() {
         playerListeners.clear();
@@ -251,7 +250,7 @@ public class NetworkEnv {
     }
 
     public interface PlayerHandler {
-        void newPlayerDetected(BasePlayer newPlayer);
+        void newPlayerDetected(NetworkPlayer newPlayer);
     }
 
     public interface InvitationHandler {

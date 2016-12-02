@@ -71,6 +71,7 @@ public class UdpConnection {
                     Object msg = Utils.getObjectFromByteArray(packet.getData());
                     if (Msg.class.isAssignableFrom(msg.getClass())) {
                         Msg message = (Msg) msg;
+                        System.out.println(msg.toString() + "received from " + message.getIpAddress());
                         if (!this.token.equals(message.getToken())) {
                             message.setIpAddress(packet.getAddress());
                             synchronized (lock) {
@@ -105,6 +106,7 @@ public class UdpConnection {
      *            destination port
      */
     public void sendMessage(Msg msg, InetAddress destination, int port) {
+        System.out.println(msg.toString() + "sent to to " + destination + ":" + port);
         msg.setToken(this.token);
         byte[] byteMsg = Utils.getByteArrayFromObject(msg);
         DatagramPacket packet = new DatagramPacket(byteMsg, byteMsg.length, new InetSocketAddress(destination, port));

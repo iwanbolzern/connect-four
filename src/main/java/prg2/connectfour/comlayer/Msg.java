@@ -6,12 +6,12 @@ import java.net.InetAddress;
 public class Msg implements Serializable {
 	private transient InetAddress ipAddress;
 	private String token;
-	private transient BasePlayer player;
+	private transient NetworkPlayer player;
 	
-	public BasePlayer getPlayer() {
+	public NetworkPlayer getPlayer() {
         return player;
     }
-    public void setPlayer(BasePlayer player) {
+    public void setPlayer(NetworkPlayer player) {
         this.player = player;
     }
     public String getToken() {

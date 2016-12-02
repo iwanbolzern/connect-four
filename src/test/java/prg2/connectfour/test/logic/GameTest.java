@@ -39,13 +39,13 @@ public class GameTest {
         Assert.assertNotNull(cur);
         Assert.assertEquals(players[0], cur);
 
-        subject.nextPlayer();
+        subject.dropOnColumn(cur, 1);
         cur = subject.getActivePlayer();
 
         Assert.assertNotNull(cur);
         Assert.assertEquals(players[1], cur);
 
-        subject.nextPlayer();
+        subject.dropOnColumn(cur, 1);
         cur = subject.getActivePlayer();
 
         Assert.assertNotNull(cur);
@@ -66,10 +66,28 @@ public class GameTest {
 
     @Test
     public void testIncorrectPlayerCannotMakeMove() {
-        Player prev = subject.getActivePlayer();
-        subject.nextPlayer();
+        Player two = this.players[1];
 
-        boolean result = subject.dropOnColumn(prev, 4);
+        boolean result = subject.dropOnColumn(two, 4);
         Assert.assertFalse(result);
+    }
+
+    @Test
+    public void testFullGame() {
+        Player one = this.players[0];
+        Player two = this.players[1];
+
+        Assert.assertEquals(one, subject.getActivePlayer());
+        Assert.assertTrue(subject.dropOnColumn(one, 1));
+        Assert.assertTrue(subject.dropOnColumn(two, 2));
+        Assert.assertTrue(subject.dropOnColumn(one, 1));
+        Assert.assertTrue(subject.dropOnColumn(two, 2));
+        Assert.assertTrue(subject.dropOnColumn(one, 1));
+        Assert.assertTrue(subject.dropOnColumn(two, 2));
+        Assert.assertTrue(subject.dropOnColumn(one, 1));
+
+        // Player one won
+        Assert.assertFalse(subject.dropOnColumn(two, 2));
+        Assert.assertEquals(one, subject.getWinner());
     }
 }

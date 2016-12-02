@@ -3,25 +3,31 @@ package prg2.connectfour.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultListModel;
+import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import prg2.connectfour.comlayer.BasePlayer;
+import prg2.connectfour.comlayer.NetworkPlayer;
 import prg2.connectfour.comlayer.InvitationMsg;
 import prg2.connectfour.comlayer.InvitationResponseMsg;
 import prg2.connectfour.comlayer.NetworkEnv;
 import prg2.connectfour.comlayer.NetworkEnv.*;
+import prg2.connectfour.utils.Pair;
 
 /**
  * SearchPlayerScreen displays a list of players to choose
@@ -34,7 +40,7 @@ public class SearchPlayerScreen extends JPanel
     implements PlayerHandler, InvitationHandler, InvitationResponseHandler{
 
     private NetworkEnv networkEnv;
-    private HashMap<String, BasePlayer> invitationTokens = new HashMap<>();
+    private HashMap<String, NetworkPlayer> invitationTokens = new HashMap<>();
 
     private ArrayList<StartGameHandler> startGameListeners = new ArrayList<>();
 
@@ -59,6 +65,7 @@ public class SearchPlayerScreen extends JPanel
         this.playerList = new JList(playerListModel);
         this.playerList.setLayoutOrientation(JList.VERTICAL);
         this.playerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.playerList.setCellRenderer(new PlayerListCellRender());
 
         listSelectionModel = this.playerList.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener() {
@@ -76,8 +83,15 @@ public class SearchPlayerScreen extends JPanel
         this.inviteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
-               System.out.println(e.getActionCommand());
+               if(e.getActionCommand() == "Invite Selected" &&
+                       listSelectionModel.getMaxSelectionIndex() != -1) {
+                   Pair<Integer, Integer> size = PlayGroundSizeDialog.showDialog();
+                   if(size != null) {
+                       NetworkPlayer player = (NetworkPlayer)playerListModel.getElementAt(listSelectionModel.getMaxSelectionIndex());
+                       String newToken = networkEnv.sendInvitation(player, size.left, size.right);
+                       invitationTokens.put(newToken, player);
+                   }
+               }
             }
         });
         revalidate();
@@ -95,9 +109,10 @@ public class SearchPlayerScreen extends JPanel
      * player to the invitationTokens HashMap and inserts a new
      * player into the UI.
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public void newPlayerDetected(BasePlayer newPlayer) {
-        this.playerListModel.addElement(newPlayer.getName());
+    public void newPlayerDetected(NetworkPlayer newPlayer) {
+        this.playerListModel.addElement(newPlayer);
         revalidate();
     }
 
@@ -128,7 +143,7 @@ public class SearchPlayerScreen extends JPanel
     @Override
     public void invitationResponseReceived(InvitationResponseMsg msg) {
         if(this.invitationTokens.containsKey(msg.getInvitationToken())) {
-            BasePlayer opponent = this.invitationTokens.get(msg.getInvitationToken());
+            NetworkPlayer opponent = this.invitationTokens.get(msg.getInvitationToken());
             this.onStartGame(msg.getInvitationToken(), opponent, true);
         }
     }
@@ -137,12 +152,7 @@ public class SearchPlayerScreen extends JPanel
         this.networkEnv.broadcastHelloMsg();
     }
 
-    private void invitePlayer(BasePlayer player) {
-        String newToken = this.networkEnv.sendInvitation(player, 7, 5); //TODO: ask for playground size
-        invitationTokens.put(newToken, player);
-    }
-
-    private void onStartGame(String gameToken, BasePlayer player, boolean hasToSendStart) {
+    private void onStartGame(String gameToken, NetworkPlayer player, boolean hasToSendStart) {
         for(StartGameHandler listener : this.startGameListeners)
             listener.startGame(gameToken, player, hasToSendStart, 7, 5);
     }
@@ -152,6 +162,35 @@ public class SearchPlayerScreen extends JPanel
     }
 
     public interface StartGameHandler {
-        void startGame(String gameToken, BasePlayer player, boolean hasToSendStart, int x, int y);
+        void startGame(String gameToken, NetworkPlayer player, boolean hasToSendStart, int x, int y);
+    }
+    
+    class PlayerListCellRender extends JPanel implements ListCellRenderer {
+        
+        public PlayerListCellRender() {
+            this.setLayout(new GridBagLayout());
+        }
+
+        @Override
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            GridBagConstraints c = new GridBagConstraints();
+            NetworkPlayer player = (NetworkPlayer)list.getModel().getElementAt(index);
+            
+            JLabel nameLabel = new JLabel(player.getName());
+            c.gridx = 0;
+            c.gridy = 0;
+            c.weightx = 0.8;
+            this.add(nameLabel, c);
+            
+            if (isSelected) {
+                setBackground(list.getSelectionBackground());
+                setForeground(list.getSelectionForeground());
+            } else {
+                setBackground(list.getBackground());
+                setForeground(list.getForeground());
+            }
+            return this;
+        }
+        
     }
 }

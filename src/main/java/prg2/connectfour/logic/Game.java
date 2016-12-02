@@ -1,39 +1,72 @@
 package prg2.connectfour.logic;
 
+import prg2.connectfour.logic.rule.IteratorWinRule;
+
 public class Game {
     private Grid grid;
-    private boolean isFinished;
+    private Player winner;
     private Player[] players;
     private int playerIndex;
     private int playerCount;
 
     Game(Player[] players, Grid grid) {
         this.grid = grid;
-        this.isFinished = false;
         this.playerCount = players.length;
         this.players = players;
     }
 
     public boolean isFinished() {
-        return this.isFinished;
+        return this.winner != null;
     }
 
     public Player getWinner() {
-        return null;
+        return this.winner;
     }
 
     public Player getActivePlayer() {
+        if (isFinished())
+            return null;
+
         return this.players[playerIndex];
     }
 
-    public void nextPlayer() {
+    private void nextPlayer() {
         this.playerIndex = (this.playerIndex + 1) % this.playerCount;
     }
 
     public boolean dropOnColumn(Player player, int column) {
+        if (isFinished())
+            return false;
+
         if (getActivePlayer() != player)
             return false;
 
-        return grid.dropOnColumn(player, column);
+        if (!grid.dropOnColumn(player, column))
+            return false;
+
+        nextPlayer();
+        detectWinner();
+        return true;
+    }
+
+    private void detectWinner() {
+        IteratorWinRule[] rules = new IteratorWinRule[]{
+                IteratorWinRule.Horizontal,
+                IteratorWinRule.Vertical,
+                IteratorWinRule.DiagonalLeft,
+                IteratorWinRule.DiagonalRight
+        };
+
+        for (IteratorWinRule rule : rules) {
+            Player winner = rule.playerWon(this.grid);
+            if (winner != null) {
+                this.winner = winner;
+                return;
+            }
+        }
+    }
+    
+    public boolean dropOnColumn(int column) {
+        return grid.dropOnColumn(getActivePlayer(), column);
     }
 }

@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import prg2.connectfour.comlayer.BasePlayer;
+import prg2.connectfour.comlayer.NetworkPlayer;
 import prg2.connectfour.comlayer.NetworkEnv;
 
 import java.util.concurrent.Semaphore;
@@ -12,8 +12,8 @@ import java.util.concurrent.Semaphore;
 public class NetworkEnvTest {
     private NetworkEnv clientOne;
     private NetworkEnv clientTwo;
-    private BasePlayer playerOne;
-    private BasePlayer playerTwo;
+    private NetworkPlayer playerOne;
+    private NetworkPlayer playerTwo;
 
     @Before
     public void setup() {
@@ -31,7 +31,7 @@ public class NetworkEnvTest {
 
         this.clientOne.addNewPlayerListener(new NetworkEnv.PlayerHandler() {
             @Override
-            public void newPlayerDetected(BasePlayer newPlayer) {
+            public void newPlayerDetected(NetworkPlayer newPlayer) {
                 playerTwo = newPlayer;
                 semaphore.release();
             }
@@ -39,7 +39,7 @@ public class NetworkEnvTest {
 
         this.clientTwo.addNewPlayerListener(new NetworkEnv.PlayerHandler() {
             @Override
-            public void newPlayerDetected(BasePlayer newPlayer) {
+            public void newPlayerDetected(NetworkPlayer newPlayer) {
                 playerOne = newPlayer;
                 semaphore.release();
             }

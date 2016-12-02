@@ -2,10 +2,16 @@ package prg2.connectfour.comlayer;
 
 import java.net.InetAddress;
 
-public class BasePlayer {
-	String token;
-	String name;
+import prg2.connectfour.logic.Color;
+import prg2.connectfour.logic.Player;
+
+public class NetworkPlayer extends Player {
+    String token;
 	InetAddress inetAdress;
+	
+	public NetworkPlayer(String name, Color color) {
+        super(name, color);
+    }
 	
 	public InetAddress getInetAdress() {
         return inetAdress;
@@ -26,12 +32,5 @@ public class BasePlayer {
 	}
 	public void setToken(String token) {
 		this.token = token;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	
+	}	
 }
