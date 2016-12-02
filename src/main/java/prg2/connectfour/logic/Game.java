@@ -67,6 +67,6 @@ public class Game {
     }
     
     public boolean dropOnColumn(int column) {
-        return grid.dropOnColumn(getActivePlayer(), column);
+        return dropOnColumn(getActivePlayer(), column);
     }
 }
