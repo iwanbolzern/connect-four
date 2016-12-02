@@ -22,7 +22,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import prg2.connectfour.comlayer.BasePlayer;
+import prg2.connectfour.comlayer.NetworkPlayer;
 import prg2.connectfour.comlayer.InvitationMsg;
 import prg2.connectfour.comlayer.InvitationResponseMsg;
 import prg2.connectfour.comlayer.NetworkEnv;
@@ -40,7 +40,7 @@ public class SearchPlayerScreen extends JPanel
     implements PlayerHandler, InvitationHandler, InvitationResponseHandler{
 
     private NetworkEnv networkEnv;
-    private HashMap<String, BasePlayer> invitationTokens = new HashMap<>();
+    private HashMap<String, NetworkPlayer> invitationTokens = new HashMap<>();
 
     private ArrayList<StartGameHandler> startGameListeners = new ArrayList<>();
 
@@ -87,7 +87,7 @@ public class SearchPlayerScreen extends JPanel
                        listSelectionModel.getMaxSelectionIndex() != -1) {
                    Pair<Integer, Integer> size = PlayGroundSizeDialog.showDialog();
                    if(size != null) {
-                       BasePlayer player = (BasePlayer)playerListModel.getElementAt(listSelectionModel.getMaxSelectionIndex());
+                       NetworkPlayer player = (NetworkPlayer)playerListModel.getElementAt(listSelectionModel.getMaxSelectionIndex());
                        String newToken = networkEnv.sendInvitation(player, size.left, size.right);
                        invitationTokens.put(newToken, player);
                    }
@@ -111,7 +111,7 @@ public class SearchPlayerScreen extends JPanel
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void newPlayerDetected(BasePlayer newPlayer) {
+    public void newPlayerDetected(NetworkPlayer newPlayer) {
         this.playerListModel.addElement(newPlayer);
         revalidate();
     }
@@ -143,7 +143,7 @@ public class SearchPlayerScreen extends JPanel
     @Override
     public void invitationResponseReceived(InvitationResponseMsg msg) {
         if(this.invitationTokens.containsKey(msg.getInvitationToken())) {
-            BasePlayer opponent = this.invitationTokens.get(msg.getInvitationToken());
+            NetworkPlayer opponent = this.invitationTokens.get(msg.getInvitationToken());
             this.onStartGame(msg.getInvitationToken(), opponent, true);
         }
     }
@@ -152,7 +152,7 @@ public class SearchPlayerScreen extends JPanel
         this.networkEnv.broadcastHelloMsg();
     }
 
-    private void onStartGame(String gameToken, BasePlayer player, boolean hasToSendStart) {
+    private void onStartGame(String gameToken, NetworkPlayer player, boolean hasToSendStart) {
         for(StartGameHandler listener : this.startGameListeners)
             listener.startGame(gameToken, player, hasToSendStart, 7, 5);
     }
@@ -162,7 +162,7 @@ public class SearchPlayerScreen extends JPanel
     }
 
     public interface StartGameHandler {
-        void startGame(String gameToken, BasePlayer player, boolean hasToSendStart, int x, int y);
+        void startGame(String gameToken, NetworkPlayer player, boolean hasToSendStart, int x, int y);
     }
     
     class PlayerListCellRender extends JPanel implements ListCellRenderer {
@@ -174,7 +174,7 @@ public class SearchPlayerScreen extends JPanel
         @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             GridBagConstraints c = new GridBagConstraints();
-            BasePlayer player = (BasePlayer)list.getModel().getElementAt(index);
+            NetworkPlayer player = (NetworkPlayer)list.getModel().getElementAt(index);
             
             JLabel nameLabel = new JLabel(player.getName());
             c.gridx = 0;

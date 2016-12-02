@@ -1,14 +1,18 @@
 package prg2.connectfour.logic;
 
 import prg2.connectfour.logic.Color;
-import prg2.connectfour.comlayer.BasePlayer;
 
-public class Player extends BasePlayer {
+public class Player {
     private Color color;
+    private String name;
 
     public Player(String name, Color color) {
         this.color = color;
-        this.setName(name);
+        this.name = name;
+    }
+    
+    public String getName() {
+        return name;
     }
 
     public Color getColor() {
