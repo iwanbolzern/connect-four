@@ -53,4 +53,19 @@ public class Grid {
     public int getHeight() {
         return height;
     }
+    
+    public boolean isBoardEmpty(){
+    	//ToDo implement here?
+    	return false;
+    }
+    
+    public int getRowValue(int column){
+    	// ToDo implement here?
+    	return 0;
+    }
+    
+    public boolean checkXInARow(int col, int row, int count, Player player, Grid board){
+    	//ToDo use Connectfour.logic.rule
+    	return true;
+    }
 }
