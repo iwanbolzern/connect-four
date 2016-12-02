@@ -20,6 +20,7 @@ import prg2.connectfour.logic.Game;
 import prg2.connectfour.logic.GameFactory;
 import prg2.connectfour.logic.Grid;
 import prg2.connectfour.logic.Player;
+import prg2.connectfour.logic.bot.GameTheory;
 
 public class PlayGround extends JPanel implements MoveHandler {
     private Grid grid;
@@ -59,7 +60,7 @@ public class PlayGround extends JPanel implements MoveHandler {
         
         
         if(!canIStart) {
-            this.players[0] = this.players[1];
+            this.players[1] = this.players[0];
             this.players[0] = player;
         }
         
@@ -80,9 +81,12 @@ public class PlayGround extends JPanel implements MoveHandler {
                 this.activePlayerLabel.setText("Der andere ist am zug");
                 this.networkEnv.addMoveListener(this);
             } 
-//            else if(activePlayer instanceof BotPlayer) {
-//                TODO: insert bot mode
-//            } 
+            else if(activePlayer instanceof GameTheory) {
+                disableButtons();
+                int nextMove = ((GameTheory)activePlayer).getNextMove(this.grid);
+                this.game.dropOnColumn(nextMove);
+                processNext();
+            } 
             else if(activePlayer instanceof Player) {
                 this.activePlayerLabel.setText("Du bist am zug");
                 enableButtons();
@@ -95,14 +99,14 @@ public class PlayGround extends JPanel implements MoveHandler {
         for(int x = 0; x < this.grid.getWidth(); x++) {
             Cell cell = this.grid.getCellAt(x, this.grid.getHeight() - 1);
             if(cell.getOwner() == null) {
-                this.buttons[x].enableInputMethods(true);
+                this.buttons[x].setEnabled(true);
             }
         }
     }
     
     private void disableButtons() {
         for(JButton button : this.buttons) {
-            button.enableInputMethods(false);
+            button.setEnabled(false);
         }
     }
     
@@ -149,8 +153,6 @@ public class PlayGround extends JPanel implements MoveHandler {
 	        this.gridPanel = new JPanel();
 		
 	    this.gridPanel.setLayout(new GridLayout(this.grid.getHeight(), this.grid.getWidth()));
-
-	    JPanel[][] panelHolder = new JPanel[this.grid.getHeight()][this.grid.getWidth()];
 	    
         this.slots = new JLabel[this.grid.getHeight()][this.grid.getWidth()];
         
@@ -168,7 +170,7 @@ public class PlayGround extends JPanel implements MoveHandler {
                     }
                     else if(cell.getOwner().getColor() == Color.Yellow) {
                         slots[row][column].setBackground(java.awt.Color.YELLOW);
-                    slots[row][column].setText("yellow");
+                        slots[row][column].setText("yellow");
                     }
                     else
                         throw new IllegalArgumentException("Player Color not known");
