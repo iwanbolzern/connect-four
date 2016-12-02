@@ -73,13 +73,14 @@ public class NetworkEnv {
             player.setPort(msg.getPort());
             player.setInetAdress(msg.getIpAddress());
             player.setToken(msg.getToken());
+            msg.setPlayer(player);
             activeConnections.put(msg.getToken(), player);
             HelloResponseMsg response = new HelloResponseMsg();
             response.setName(playerName);
             response.setPort(udpConnection.getListenPort());
             System.out.println("Hello response sent to " + msg.getIpAddress() + ":" + msg.getPort());
             udpConnection.sendMessage(response, msg.getIpAddress(), msg.getPort());
-            onNewPlayerDetected(msg);
+            onNewPlayerDetected(player);
         }
     }
 
@@ -90,8 +91,9 @@ public class NetworkEnv {
             player.setPort(msg.getPort());
             player.setInetAdress(msg.getIpAddress());
             player.setToken(msg.getToken());
+            msg.setPlayer(player);
             activeConnections.put(msg.getToken(), player);
-            onNewPlayerDetected(msg);
+            onNewPlayerDetected(player);
         }
     }
 
@@ -177,13 +179,7 @@ public class NetworkEnv {
         }
     }
 
-    private void onNewPlayerDetected(HelloMsg helloMsg) {
-        BasePlayer newPlayer = new BasePlayer() {
-            {
-                setName(helloMsg.getName());
-                setToken(helloMsg.getToken());
-            }
-        };
+    private void onNewPlayerDetected(BasePlayer newPlayer) {
         for (PlayerHandler listener : this.playerListeners) {
             listener.newPlayerDetected(newPlayer);
         }

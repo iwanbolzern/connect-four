@@ -98,7 +98,7 @@ public class ConnectFour extends JFrame {
         JFrame mainFrame = new ConnectFour();
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setTitle("Connect four - Have fun");
-        mainFrame.setPreferredSize(new Dimension(400, 200));
+        mainFrame.setPreferredSize(new Dimension(800, 600));
         mainFrame.pack();
         mainFrame.setVisible(true);
     }
