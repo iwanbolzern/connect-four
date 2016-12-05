@@ -3,6 +3,10 @@ package prg2.connectfour.comlayer;
 import java.io.Serializable;
 import java.net.InetAddress;
 
+/**
+ * Base class for every message which is sent with comlayer package
+ * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+ */
 public class Msg implements Serializable {
 	private transient InetAddress ipAddress;
 	private String token;
