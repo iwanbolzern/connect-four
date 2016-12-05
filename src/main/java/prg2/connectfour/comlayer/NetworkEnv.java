@@ -127,11 +127,7 @@ public class NetworkEnv {
         msg.setPort(udpConnection.getListenPort());
 
         for (int port = lowerPortRange; port < upperPortRange; port++)
-            try {
-                this.udpConnection.sendMessage(msg, InetAddress.getByName("255.255.255.255"), port);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            this.udpConnection.sendBroadcast(msg, port);
     }
 
     public String sendInvitation(NetworkPlayer player, int x, int y) {

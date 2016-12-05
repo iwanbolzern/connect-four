@@ -7,11 +7,14 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import prg2.connectfour.utils.Utils;
 
@@ -65,6 +68,7 @@ public class UdpConnection {
             byte[] payLoad = new byte[maxMsgSize];
             DatagramPacket packet = new DatagramPacket(payLoad, payLoad.length);
             try {
+                this.socket.setBroadcast(true);
                 this.socket.receive(packet);
 
                 try {
@@ -112,11 +116,43 @@ public class UdpConnection {
         DatagramPacket packet = new DatagramPacket(byteMsg, byteMsg.length, new InetSocketAddress(destination, port));
         try {
             DatagramSocket dSocket = new DatagramSocket();
+            dSocket.setBroadcast(true);
             dSocket.send(packet);
         } catch (SocketException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void sendBroadcast(Msg msg, int port) {
+        try {
+            sendMessage(msg, InetAddress.getByName("255.255.255.255"), port);
+        } catch (UnknownHostException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            // Broadcast the message over all the network interfaces
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = interfaces.nextElement();
+
+                if (!networkInterface.isUp()) {
+                    continue;
+                }
+
+                for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
+                    InetAddress broadcast = interfaceAddress.getBroadcast();
+                    if (broadcast == null) {
+                        continue;
+                    }
+                    sendMessage(msg, broadcast, port);
+
+                }
+            }
+        } catch (SocketException ex) {
+            ex.printStackTrace();
         }
     }
 
