@@ -43,7 +43,10 @@ public class ConnectFour extends JFrame {
                         add(searchPlayerScreen);
                         revalidate();
                     } else if(mode == GameMode.SINGLE) {
-                        Pair<Integer, Integer> size = PlayGroundSizeDialog.showDialog();
+                        Pair<Integer, Integer> size = new Pair<>(0, 0);
+                        while (size.left < 4 || size.right < 4) {
+                            size = PlayGroundSizeDialog.showDialog();
+                        }
                         initSinglePlayGround(size.left, size.right);
                         remove(homeScreen);
                         add(playGround);
