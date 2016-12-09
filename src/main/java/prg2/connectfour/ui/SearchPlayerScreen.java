@@ -115,12 +115,12 @@ public class SearchPlayerScreen extends JPanel
     @Override
     public void invitationReceived(InvitationMsg msg) {
         String str = "Do you want to accept an invitation from " +
-                msg.getName() + " to play connect four?";
+                msg.getPlayer().getName() + " to play connect four?";
         int result = JOptionPane.showConfirmDialog(null, str, "Invitation",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
         if (result == 0) {
-            this.onStartGame(msg.getInvitationToken(), msg.getPlayer(), false, msg.getX(), msg.getY());
+            this.onStartGame(msg, msg.getPlayer());
         }
 
         this.networkEnv.sendInvitationResponse(msg, result == 0);
@@ -131,10 +131,10 @@ public class SearchPlayerScreen extends JPanel
      * a new game.
      */
     @Override
-    public void invitationResponseReceived(InvitationResponseMsg msg) {
+    public void invitationResponseReceived(InvitationResponseMsg msg, InvitationMsg invitation) {
         if (this.invitationTokens.containsKey(msg.getInvitationToken())) {
             NetworkPlayer opponent = this.invitationTokens.get(msg.getInvitationToken());
-            this.onStartGame(msg.getInvitationToken(), opponent, true, msg.getX(), msg.getY());
+            this.onStartGame(invitation, opponent, msg);
         }
     }
 
@@ -142,9 +142,14 @@ public class SearchPlayerScreen extends JPanel
         this.networkEnv.broadcastHelloMsg();
     }
 
-    private void onStartGame(String gameToken, NetworkPlayer player, boolean hasToSendStart, int x, int y) {
+    private void onStartGame(InvitationMsg invitation, NetworkPlayer player, InvitationResponseMsg invitationResponse) {
         for (StartGameHandler listener : this.startGameListeners)
-            listener.startGame(gameToken, player, hasToSendStart, x, y);
+            listener.startGame(invitation, player, invitationResponse);
+    }
+    
+    private void onStartGame(InvitationMsg invitation, NetworkPlayer player) {
+        for (StartGameHandler listener : this.startGameListeners)
+            listener.startGame(invitation, player);
     }
 
     public void addStartGameListener(StartGameHandler listener) {
@@ -152,7 +157,9 @@ public class SearchPlayerScreen extends JPanel
     }
 
     public interface StartGameHandler {
-        void startGame(String gameToken, NetworkPlayer player, boolean hasToSendStart, int x, int y);
+        void startGame(InvitationMsg invitation, NetworkPlayer player, InvitationResponseMsg invitationResponse);
+        
+        void startGame(InvitationMsg invitation, NetworkPlayer player);
     }
 
     private class PlayerListCellRender extends JPanel implements ListCellRenderer<NetworkPlayer> {

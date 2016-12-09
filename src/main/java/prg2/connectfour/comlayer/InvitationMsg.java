@@ -9,26 +9,9 @@ import java.io.Serializable;
 public class InvitationMsg extends Msg implements Serializable {
 	private static final long serialVersionUID = -4175829652467899771L;
 	
-	private String name;
 	private String invitationToken;
 	private int x;
 	private int y;
-	
-	/**
-	 * Returns name of the player
-	 * @return name of the player
-	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * Sets name of the player
-	 * @param name of the player
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
 	
 	/**
 	 * Returns token for the given invitation.

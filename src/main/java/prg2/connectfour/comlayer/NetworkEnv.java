@@ -22,6 +22,7 @@ public class NetworkEnv {
     String playerName;
 
     private HashMap<String, NetworkPlayer> activeConnections = new HashMap<>();
+    private HashMap<String, InvitationMsg> pendingInvitations = new HashMap<>();
 
     private List<PlayerHandler> playerListeners = new ArrayList<>();
     private List<InvitationHandler> invitationListeners = new ArrayList<>();
@@ -97,25 +98,36 @@ public class NetworkEnv {
     }
 
     private void invitationMsgReceived(InvitationMsg invitation) {
-        for (InvitationHandler listener : this.invitationListeners) {
-            listener.invitationReceived(invitation);
+        if (!pendingInvitations.containsKey(invitation.getInvitationToken())) {
+            pendingInvitations.put(invitation.getInvitationToken(), invitation);
+            for (InvitationHandler listener : this.invitationListeners) {
+                listener.invitationReceived(invitation);
+            }
         }
     }
 
     private void invitationResponseReceived(InvitationResponseMsg invitationResponse) {
-        for (InvitationResponseHandler listener : this.invitationResponseListeners) {
-            listener.invitationResponseReceived(invitationResponse);
+        if (pendingInvitations.containsKey(invitationResponse.getInvitationToken())) {
+            InvitationMsg invitation = pendingInvitations.get(invitationResponse.getInvitationToken());
+            for (InvitationResponseHandler listener : this.invitationResponseListeners) {
+                listener.invitationResponseReceived(invitationResponse, invitation);
+            }
+            pendingInvitations.remove(invitationResponse.getInvitationToken());
         }
     }
 
     private void startGameReceived(StartGameMsg msg) {
-        for (StartGameHandler listener : this.startGameListeners) {
-            listener.startGame(msg.getX(), msg.getY());
+        if (pendingInvitations.containsKey(msg.getInvitationToken())) {
+            InvitationMsg invitation = pendingInvitations.get(msg.getInvitationToken());
+            for (StartGameHandler listener : this.startGameListeners) {
+                listener.startGame(msg.getGameToken(), invitation.getX(), invitation.getY());
+            }
+            pendingInvitations.remove(msg.getInvitationToken());
         }
     }
 
     private void moveReceived(MoveMsg msg) {
-        for(int i = 0; i < this.moveListeners.size(); i++) {
+        for (int i = 0; i < this.moveListeners.size(); i++) {
             this.moveListeners.get(i).movePerformed(msg.getX());
         }
     }
@@ -133,33 +145,32 @@ public class NetworkEnv {
     public String sendInvitation(NetworkPlayer player, int x, int y) {
         checkPlayer(player);
         InvitationMsg invatation = new InvitationMsg();
-        invatation.setName(playerName);
         invatation.setX(x);
         invatation.setY(y);
         invatation.setInvitationToken(Utils.generateSecureToken());
 
         this.udpConnection.sendMessage(invatation, player.getInetAdress(), player.getPort());
+        pendingInvitations.put(invatation.getInvitationToken(), invatation);
         return invatation.getInvitationToken();
     }
 
     public void sendInvitationResponse(InvitationMsg invitation, boolean wantToPlay) {
         checkPlayer(invitation.getPlayer());
         InvitationResponseMsg msg = new InvitationResponseMsg();
-        msg.setX(invitation.getX());
-        msg.setY(invitation.getY());
         msg.setInvitationToken(invitation.getInvitationToken());
         msg.setInvitationAccepted(wantToPlay);
 
         this.udpConnection.sendMessage(msg, invitation.getPlayer().getInetAdress(), invitation.getPlayer().getPort());
     }
 
-    public void sendStartGame(NetworkPlayer player, int x, int y) {
+    public String sendStartGame(NetworkPlayer player, String invitationToken) {
         checkPlayer(player);
         StartGameMsg msg = new StartGameMsg();
-        msg.setX(x);
-        msg.setY(y);
-
+        msg.setInvitationToken(invitationToken);
+        msg.setGameToken(Utils.generateSecureToken());
         this.udpConnection.sendMessage(msg, player.getInetAdress(), player.getPort());
+
+        return msg.getGameToken();
     }
 
     public void sendMove(NetworkPlayer player, int x) {
@@ -236,7 +247,7 @@ public class NetworkEnv {
     public void addMoveListener(MoveHandler listener) {
         moveListeners.add(listener);
     }
-    
+
     public void removeAllMoveListeners() {
         moveListeners.clear();
     }
@@ -256,7 +267,7 @@ public class NetworkEnv {
     }
 
     public interface InvitationResponseHandler {
-        void invitationResponseReceived(InvitationResponseMsg msg);
+        void invitationResponseReceived(InvitationResponseMsg msg, InvitationMsg invitation);
     }
 
     public interface MoveHandler {
@@ -264,6 +275,6 @@ public class NetworkEnv {
     }
 
     public interface StartGameHandler {
-        void startGame(int x, int y);
+        void startGame(String gameToken, int x, int y);
     }
 }

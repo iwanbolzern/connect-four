@@ -13,6 +13,8 @@ import prg2.connectfour.ui.SearchPlayerScreen;
 import prg2.connectfour.ui.HomeScreen.GameMode;
 import prg2.connectfour.utils.Pair;
 import prg2.connectfour.utils.Utils;
+import prg2.connectfour.comlayer.InvitationResponseMsg;
+import prg2.connectfour.comlayer.InvitationMsg;
 import prg2.connectfour.comlayer.NetworkPlayer;
 import prg2.connectfour.comlayer.NetworkEnv;
 
@@ -69,24 +71,25 @@ public class ConnectFour extends JFrame {
         this.searchPlayerScreen = new SearchPlayerScreen(this.networkEnv);
         this.searchPlayerScreen.addStartGameListener(new SearchPlayerScreen.StartGameHandler() {
                 @Override
-                public void startGame(String gameToken, NetworkPlayer player, boolean hasToSendStart, int x, int y) {
-                    if(!hasToSendStart) {
-                        networkEnv.addStartGameListener(new NetworkEnv.StartGameHandler() {
-                                @Override
-                                public void startGame(int x, int y) {
-                                    initNetworkPlayGround(gameToken, player, x, y, true);
-                                    remove(searchPlayerScreen);
-                                    add(playGround);
-                                    revalidate();
-                                }
-                            });
-                    } else {
-                        networkEnv.sendStartGame(player, x, y);
-                        initNetworkPlayGround(gameToken, player, x, y, false);
+                public void startGame(InvitationMsg invitation, NetworkPlayer player, InvitationResponseMsg invitationResponse) {
+                        String gameToken = networkEnv.sendStartGame(player, invitation.getInvitationToken());
+                        initNetworkPlayGround(gameToken, player, invitation.getX(), invitation.getY(), false);
                         remove(searchPlayerScreen);
                         add(playGround);
                         revalidate();
-                    }
+                }
+                
+                @Override
+                public void startGame(InvitationMsg invitation, NetworkPlayer player) {
+                    networkEnv.addStartGameListener(new NetworkEnv.StartGameHandler() {
+                        @Override
+                        public void startGame(String gameToken, int x, int y) {
+                            initNetworkPlayGround(gameToken, player, x, y, true);
+                            remove(searchPlayerScreen);
+                            add(playGround);
+                            revalidate();
+                        }
+                    });
                 }
             });
         this.searchPlayerScreen.init();

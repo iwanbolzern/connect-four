@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class MoveMsg extends Msg implements Serializable {
     private static final long serialVersionUID = -6056126601687864227L;
     
+    private String gameToken;
     private int x;
 
     /**
@@ -26,5 +27,13 @@ public class MoveMsg extends Msg implements Serializable {
 	public void setX(int x) {
 		this.x = x;
 	}
+	
+	public String getGameToken() {
+        return gameToken;
+    }
+
+    public void setGameToken(String gameToken) {
+        this.gameToken = gameToken;
+    }
 	
 }
