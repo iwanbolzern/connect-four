@@ -184,7 +184,11 @@ public class PlayGround extends JPanel implements MoveHandler {
 
     public void showFinish() {
         String msg, title;
-        if (this.game.getWinner() instanceof NetworkPlayer) {
+        if (this.game.getWinner() == null) {
+            msg = "No more fields.";
+            title = "Draw";
+        }
+        else if (this.game.getWinner() instanceof NetworkPlayer) {
             msg = this.game.getWinner().getName() + " is much better than you. Go home and cry.";
             title = "Loser";
         } else if (this.game.getWinner() instanceof GameTheory) {
