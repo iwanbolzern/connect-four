@@ -16,7 +16,7 @@ import prg2.connectfour.utils.Utils;
 public class NetworkEnv {
 
     private static final int lowerPortRange = 50000;
-    private static final int upperPortRange = 50010;
+    private static final int upperPortRange = 50005;
 
     UdpConnection udpConnection;
     String playerName;

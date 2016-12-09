@@ -63,8 +63,11 @@ public class PlayGround extends JPanel implements MoveHandler {
         processNext();
     }
 
-    public void singleInit() {
-
+    public void singleInit(GameTheory bot) {
+        this.players[1] = bot;
+        
+        initGame();
+        processNext();
     }
 
     private void processNext() {
@@ -185,7 +188,7 @@ public class PlayGround extends JPanel implements MoveHandler {
             msg = this.game.getWinner().getName() + " is much better than you. Go home and cry.";
             title = "Loser";
         } else if (this.game.getWinner() instanceof GameTheory) {
-            msg = "Really, you're worse than a computer.";
+            msg = "Really, you're worser than a computer.";
             title = "Loser";
         } else {
             msg = "Well done!";

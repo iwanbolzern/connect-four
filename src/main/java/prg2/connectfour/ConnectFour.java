@@ -4,10 +4,15 @@ import java.awt.Dimension;
 
 import javax.swing.*;
 
+import prg2.connectfour.logic.Color;
+import prg2.connectfour.logic.bot.GameTheory;
 import prg2.connectfour.ui.HomeScreen;
 import prg2.connectfour.ui.PlayGround;
+import prg2.connectfour.ui.PlayGroundSizeDialog;
 import prg2.connectfour.ui.SearchPlayerScreen;
 import prg2.connectfour.ui.HomeScreen.GameMode;
+import prg2.connectfour.utils.Pair;
+import prg2.connectfour.utils.Utils;
 import prg2.connectfour.comlayer.NetworkPlayer;
 import prg2.connectfour.comlayer.NetworkEnv;
 
@@ -38,8 +43,8 @@ public class ConnectFour extends JFrame {
                         add(searchPlayerScreen);
                         revalidate();
                     } else if(mode == GameMode.SINGLE) {
-                        // TODO: show message box for x,y
-                        initSinglePlayGround(7, 5);
+                        Pair<Integer, Integer> size = PlayGroundSizeDialog.showDialog();
+                        initSinglePlayGround(size.left, size.right);
                         remove(homeScreen);
                         add(playGround);
                         revalidate();
@@ -90,9 +95,9 @@ public class ConnectFour extends JFrame {
     }
 
     private void initSinglePlayGround(int x, int y) {
-        // TODO
-        //this.playGround = new PlayGround();
-        //this.playGround.singleInit(x, y);
+        this.playGround = new PlayGround(x, y, name);
+        GameTheory bot = new GameTheory("Best of all", Color.Yellow);
+        this.playGround.singleInit(bot);
     }
 
     public static void main(String[] args) {
