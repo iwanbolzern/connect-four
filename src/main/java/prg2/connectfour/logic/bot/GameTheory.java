@@ -72,7 +72,7 @@ public class GameTheory extends Player {
         for (column = 0; column < maxColumn; column++) {
             row = board.countFilledCells(column);
             // if column is full, row = -1:
-            if (row != -1 && board.checkXInARow(column, row, 4, thisPlayer)) // CheckXInARow
+            if (row != -1 && board.checkCount(column, row, 4, thisPlayer)) // CheckXInARow
                                                                                     // checks
                                                                                     // if
                                                                                     // X
@@ -96,7 +96,7 @@ public class GameTheory extends Player {
         for (column = 0; column < maxColumn; column++) {
             row = board.countFilledCells(column);
             // if column is full, row = -1:
-            if (row != -1 && board.checkXInARow(column, row, 4, enemyPlayer)) // CheckXInARow
+            if (row != -1 && board.checkCount(column, row, 4, enemyPlayer)) // CheckXInARow
                                                                                      // checks
                                                                                      // if
                                                                                      // X
@@ -120,13 +120,13 @@ public class GameTheory extends Player {
         for (column = 0; column < maxColumn; column++) {
             row = board.countFilledCells(column);
 
-            if (row != -1 && board.checkXInARow(column, row, 3, enemyPlayer)) {
+            if (row != -1 && board.checkCount(column, row, 3, enemyPlayer)) {
                 // Try to destroy enemies chances to win. In all of this moves
                 // the enemy can have 3 in a row
                 possibleSolutions.add(column);
             }
             if (possibleSolutions.isEmpty()) {
-                if (row != -1 && board.checkXInARow(column, row, 2, enemyPlayer)) {
+                if (row != -1 && board.checkCount(column, row, 2, enemyPlayer)) {
                     // Enemy player can't have 3 in a row, so check for 2 in a
                     // row...
                     possibleSolutions.add(column);
@@ -142,7 +142,7 @@ public class GameTheory extends Player {
         while (solutionsItr.hasNext()) {
             possibleColumn = solutionsItr.next();
             int nextRow = board.countFilledCells(possibleColumn) + 1;
-            if (nextRow < maxRow && board.checkXInARow(possibleColumn, nextRow, 4, enemyPlayer)) {
+            if (nextRow < maxRow && board.checkCount(possibleColumn, nextRow, 4, enemyPlayer)) {
                 solutionsItr.remove();
             }
         }
@@ -161,7 +161,7 @@ public class GameTheory extends Player {
         for (int col = 0; col < maxColumn; col++) {
             // add moves that enable my enemy to win to veryBadIdeas
             int nextRow = board.countFilledCells(col) + 1;
-            if (nextRow < maxRow && board.checkXInARow(col, nextRow, 4, enemyPlayer))
+            if (nextRow < maxRow && board.checkCount(col, nextRow, 4, enemyPlayer))
                 veryBadIdeas.add(col);
         }
     }

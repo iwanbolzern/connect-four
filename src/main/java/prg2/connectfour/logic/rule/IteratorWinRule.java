@@ -12,6 +12,13 @@ public class IteratorWinRule {
     public static IteratorWinRule DiagonalRight = new IteratorWinRule(IGridIterator.DiagonalRight);
     public static IteratorWinRule DiagonalLeft = new IteratorWinRule(IGridIterator.DiagonalLeft);
 
+    public static IteratorWinRule[] All = new IteratorWinRule[] {
+            Horizontal,
+            Vertical,
+            DiagonalRight,
+            DiagonalLeft
+    };
+
     private IGridIterator iterator;
 
     private IteratorWinRule(IGridIterator iterator) {

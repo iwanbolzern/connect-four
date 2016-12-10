@@ -9,5 +9,12 @@ public interface IGridIterator {
     IGridIterator DiagonalRight = new DiagonalRightGridIterator();
     IGridIterator DiagonalLeft = new DiagonalLeftGridIterator();
 
+    IGridIterator[] All = new IGridIterator[]{
+            Horizontal,
+            Vertical,
+            DiagonalRight,
+            DiagonalLeft
+    };
+
     Iterable<Cell> getCells(Grid grid, int x, int y);
 }

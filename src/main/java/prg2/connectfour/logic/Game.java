@@ -50,14 +50,7 @@ public class Game {
     }
 
     private void detectWinner() {
-        IteratorWinRule[] rules = new IteratorWinRule[]{
-                IteratorWinRule.Horizontal,
-                IteratorWinRule.Vertical,
-                IteratorWinRule.DiagonalLeft,
-                IteratorWinRule.DiagonalRight
-        };
-
-        for (IteratorWinRule rule : rules) {
+        for (IteratorWinRule rule : IteratorWinRule.All) {
             Player winner = rule.playerWon(this.grid);
             if (winner != null) {
                 this.winner = winner;
