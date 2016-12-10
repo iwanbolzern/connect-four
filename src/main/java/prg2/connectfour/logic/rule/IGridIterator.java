@@ -3,6 +3,11 @@ package prg2.connectfour.logic.rule;
 import prg2.connectfour.logic.Cell;
 import prg2.connectfour.logic.Grid;
 
-interface IGridIterator {
+public interface IGridIterator {
+    IGridIterator Horizontal = new HorizontalGridIterator();
+    IGridIterator Vertical = new VerticalGridIterator();
+    IGridIterator DiagonalRight = new DiagonalRightGridIterator();
+    IGridIterator DiagonalLeft = new DiagonalLeftGridIterator();
+
     Iterable<Cell> getCells(Grid grid, int x, int y);
 }

@@ -1,5 +1,11 @@
 package prg2.connectfour.logic;
 
+import prg2.connectfour.logic.rule.IGridIterator;
+import prg2.connectfour.logic.rule.IteratorReduction;
+import prg2.connectfour.utils.Pair;
+
+import java.util.Stack;
+
 public class Grid {
     private int width;
     private int height;
@@ -42,10 +48,6 @@ public class Grid {
         return false;
     }
 
-    private int getIndex(int x, int y) {
-        return (this.width * y) + x;
-    }
-
     public int getWidth() {
         return width;
     }
@@ -71,14 +73,24 @@ public class Grid {
 
         return true;
     }
-    
-    public int getRowValue(int column){
-    	// ToDo implement here?
-    	return 0;
+
+    public int countFilledCells(int column) {
+        Stack<Pair<Player, Integer>> stack = IteratorReduction.reduceWithIterator(this, IGridIterator.Horizontal, column, 0);
+        int count = 0;
+        while (!stack.empty()) {
+            Pair<Player, Integer> pair = stack.pop();
+            if (pair.left != null)
+                count += pair.right;
+        }
+
+        return count;
     }
-    
-    public boolean checkXInARow(int col, int row, int count, Player player, Grid board){
-    	//ToDo use Connectfour.logic.rule
-    	return true;
+
+    public boolean checkXInARow(int col, int row, int count, Player player) {
+        return true;
+    }
+
+    private int getIndex(int x, int y) {
+        return (this.width * y) + x;
     }
 }

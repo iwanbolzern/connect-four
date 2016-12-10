@@ -65,7 +65,7 @@ public class Game {
             }
         }
     }
-    
+
     public boolean dropOnColumn(int column) {
         return dropOnColumn(getActivePlayer(), column);
     }
