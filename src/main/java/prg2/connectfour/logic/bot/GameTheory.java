@@ -34,7 +34,7 @@ public class GameTheory extends Player {
         this.maxColumn = board.getWidth();
         this.maxRow = board.getHeight();
 
-        if (board.isBoardEmpty()) {
+        if (board.isEmpty()) {
             return 4; // Stein in mitte legen
         }
 

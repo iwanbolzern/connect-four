@@ -53,10 +53,23 @@ public class Grid {
     public int getHeight() {
         return height;
     }
-    
-    public boolean isBoardEmpty(){
-    	//ToDo implement here?
-    	return false;
+
+    public boolean isFull() {
+        for (Cell cell : this.cells) {
+            if (cell.getOwner() == null)
+                return false;
+        }
+
+        return true;
+    }
+
+    public boolean isEmpty() {
+        for (Cell cell : this.cells) {
+            if (cell.getOwner() != null)
+                return false;
+        }
+
+        return true;
     }
     
     public int getRowValue(int column){

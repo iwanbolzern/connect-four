@@ -16,7 +16,7 @@ public class Game {
     }
 
     public boolean isFinished() {
-        return this.winner != null;
+        return grid.isFull() || this.winner != null;
     }
 
     public Player getWinner() {
