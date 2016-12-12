@@ -73,7 +73,6 @@ public class SearchPlayerScreen extends JPanel
         this.playerList.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    System.out.println("clicked");
                     NetworkPlayer player = playerList.getSelectedValue();
                     String newToken = networkEnv.sendInvitation(player, x, y);
                     invitationTokens.put(newToken, player);

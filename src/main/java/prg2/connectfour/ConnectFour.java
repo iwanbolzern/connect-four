@@ -93,6 +93,13 @@ public class ConnectFour extends JFrame {
     private void initNetworkPlayGround(String gameToken, NetworkPlayer player, int x, int y, boolean canIStart) {
         this.playGround = new PlayGround(x, y, name);
         this.playGround.networkInit(this.networkEnv, gameToken, player, canIStart);
+        this.playGround.addEndGameListener(new PlayGround.EndGameHandler() {
+                @Override
+                public void endGame() {
+                    initHomeScreen();
+                    transition(playGround, homeScreen);
+                }
+            });
     }
 
     private void initSinglePlayGround(int x, int y) {
