@@ -1,5 +1,8 @@
 package prg2.connectfour.ui;
 
+import java.awt.Font;
+import java.awt.Dimension;
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,7 +40,10 @@ public class PlayGround extends JPanel implements MoveHandler {
     private NetworkPlayer networkPlayer;
     private String gameToken;
 
+    private Font font;
+
     public PlayGround(int x, int y, String myName) {
+        this.font = new Font("Arial", Font.PLAIN, 36);
         this.players[0] = new Player(myName, Color.Red);
         this.grid = new Grid(x, y);
     }
@@ -65,7 +71,7 @@ public class PlayGround extends JPanel implements MoveHandler {
 
     public void singleInit(GameTheory bot) {
         this.players[1] = bot;
-        
+
         initGame();
         processNext();
     }
@@ -109,16 +115,16 @@ public class PlayGround extends JPanel implements MoveHandler {
     }
 
     private void initComponents() {
-        this.setLayout(new GridLayout(3, 1));
+        this.setLayout(new BorderLayout(10, 10));
 
         this.activePlayerLabel = new JLabel();
-        this.add(this.activePlayerLabel);
+        //this.add(this.activePlayerLabel);
 
         drawButtons();
-        this.add(this.buttonPanel);
+        this.add(this.buttonPanel, BorderLayout.NORTH);
 
         drawGrid();
-        this.add(this.gridPanel);
+        this.add(this.gridPanel, BorderLayout.CENTER);
     }
 
     private void drawButtons() {
@@ -129,6 +135,10 @@ public class PlayGround extends JPanel implements MoveHandler {
 
         for (int i = 0; i < this.grid.getWidth(); i++) {
             buttons[i] = new JButton("" + (i + 1));
+            buttons[i].setFont(this.font);
+            Dimension d = buttons[i].getPreferredSize();
+            d.height = 100;
+            buttons[i].setPreferredSize(d);
             buttons[i].setActionCommand("" + i);
             buttons[i].addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -159,14 +169,13 @@ public class PlayGround extends JPanel implements MoveHandler {
                 slots[row][column] = new JLabel();
                 slots[row][column].setHorizontalAlignment(SwingConstants.CENTER);
                 slots[row][column].setBorder(new LineBorder(java.awt.Color.black));
+                slots[row][column].setOpaque(true);
                 Cell cell = this.grid.getCellAt(column, row);
                 if (cell.getOwner() != null) {
                     if (cell.getOwner().getColor() == Color.Red) {
-                        slots[row][column].setBackground(java.awt.Color.RED);
-                        slots[row][column].setText("Red");
+                        slots[row][column].setBackground(java.awt.Color.red);
                     } else if (cell.getOwner().getColor() == Color.Yellow) {
-                        slots[row][column].setBackground(java.awt.Color.YELLOW);
-                        slots[row][column].setText("Yellow");
+                        slots[row][column].setBackground(java.awt.Color.yellow);
                     } else
                         throw new IllegalArgumentException("Player color unknown");
                 }
@@ -199,6 +208,6 @@ public class PlayGround extends JPanel implements MoveHandler {
             title = "Winner";
         }
         JOptionPane.showMessageDialog(this, msg, title, JOptionPane.INFORMATION_MESSAGE);
-        
+
     }
 }
