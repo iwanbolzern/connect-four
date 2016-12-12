@@ -36,7 +36,8 @@ public class ConnectFour extends JFrame {
         homeScreen = new HomeScreen();
         homeScreen.addPlayListener(new HomeScreen.PlayHandler() {
                 @Override
-                public void onPlayClicked(HomeScreen.GameMode mode, String playerName) {
+                public void onPlayClicked(HomeScreen.GameMode mode,
+                                          String playerName, int x, int y) {
                     name = playerName;
                     if(mode == GameMode.NETWORK) {
                         initNetwork(playerName);
@@ -45,11 +46,7 @@ public class ConnectFour extends JFrame {
                         add(searchPlayerScreen);
                         revalidate();
                     } else if(mode == GameMode.SINGLE) {
-                        Pair<Integer, Integer> size = new Pair<>(0, 0);
-                        while (size.left < 4 || size.right < 4) {
-                            size = PlayGroundSizeDialog.showDialog();
-                        }
-                        initSinglePlayGround(size.left, size.right);
+                        initSinglePlayGround(x, y);
                         remove(homeScreen);
                         add(playGround);
                         revalidate();
@@ -78,7 +75,7 @@ public class ConnectFour extends JFrame {
                         add(playGround);
                         revalidate();
                 }
-                
+
                 @Override
                 public void startGame(InvitationMsg invitation, NetworkPlayer player) {
                     networkEnv.addStartGameListener(new NetworkEnv.StartGameHandler() {
@@ -111,7 +108,7 @@ public class ConnectFour extends JFrame {
         JFrame mainFrame = new ConnectFour();
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setTitle("Connect four - Have fun");
-        mainFrame.setPreferredSize(new Dimension(800, 600));
+        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainFrame.pack();
         mainFrame.setVisible(true);
     }
