@@ -32,6 +32,12 @@ public class ConnectFour extends JFrame {
         add(homeScreen);
     }
 
+    private void transition(JPanel from, JPanel to) {
+        this.remove(from);
+        this.add(to);
+        this.revalidate();
+    }
+
     private void initHomeScreen() {
         homeScreen = new HomeScreen();
         homeScreen.addPlayListener(new HomeScreen.PlayHandler() {
@@ -42,14 +48,10 @@ public class ConnectFour extends JFrame {
                     if(mode == GameMode.NETWORK) {
                         initNetwork(playerName);
                         initSearchPlayerScreen(playerName);
-                        remove(homeScreen);
-                        add(searchPlayerScreen);
-                        revalidate();
+                        transition(homeScreen, searchPlayerScreen);
                     } else if(mode == GameMode.SINGLE) {
                         initSinglePlayGround(x, y);
-                        remove(homeScreen);
-                        add(playGround);
-                        revalidate();
+                        transition(homeScreen, playGround);
                     } else if(mode == GameMode.LOAD_GAME) {
                         // TODO: implement load game
                     } else {
@@ -69,11 +71,9 @@ public class ConnectFour extends JFrame {
         this.searchPlayerScreen.addStartGameListener(new SearchPlayerScreen.StartGameHandler() {
                 @Override
                 public void startGame(InvitationMsg invitation, NetworkPlayer player, InvitationResponseMsg invitationResponse) {
-                        String gameToken = networkEnv.sendStartGame(player, invitation.getInvitationToken());
-                        initNetworkPlayGround(gameToken, player, invitation.getX(), invitation.getY(), false);
-                        remove(searchPlayerScreen);
-                        add(playGround);
-                        revalidate();
+                    String gameToken = networkEnv.sendStartGame(player, invitation.getInvitationToken());
+                    initNetworkPlayGround(gameToken, player, invitation.getX(), invitation.getY(), false);
+                    transition(searchPlayerScreen, playGround);
                 }
 
                 @Override
@@ -82,9 +82,7 @@ public class ConnectFour extends JFrame {
                         @Override
                         public void startGame(String gameToken, int x, int y) {
                             initNetworkPlayGround(gameToken, player, x, y, true);
-                            remove(searchPlayerScreen);
-                            add(playGround);
-                            revalidate();
+                            transition(searchPlayerScreen, playGround);
                         }
                     });
                 }
@@ -101,6 +99,13 @@ public class ConnectFour extends JFrame {
         this.playGround = new PlayGround(x, y, name);
         GameTheory bot = new GameTheory("Best of all", Color.Yellow);
         this.playGround.singleInit(bot);
+        this.playGround.addEndGameListener(new PlayGround.EndGameHandler() {
+                @Override
+                public void endGame() {
+                    initHomeScreen();
+                    transition(playGround, homeScreen);
+                }
+            });
     }
 
     public static void main(String[] args) {

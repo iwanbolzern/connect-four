@@ -1,5 +1,7 @@
 package prg2.connectfour.ui;
 
+import java.util.ArrayList;
+
 import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
@@ -26,6 +28,8 @@ import prg2.connectfour.logic.Player;
 import prg2.connectfour.logic.bot.GameTheory;
 
 public class PlayGround extends JPanel implements MoveHandler {
+    private ArrayList<EndGameHandler> endGameListeners = new ArrayList<>();
+
     private Grid grid;
     private Game game;
     private Player[] players = new Player[2];
@@ -95,6 +99,7 @@ public class PlayGround extends JPanel implements MoveHandler {
             }
         } else {
             showFinish();
+            onEndGame();
         }
         revalidate();
     }
@@ -209,5 +214,19 @@ public class PlayGround extends JPanel implements MoveHandler {
         }
         JOptionPane.showMessageDialog(this, msg, title, JOptionPane.INFORMATION_MESSAGE);
 
+    }
+
+    public void addEndGameListener(EndGameHandler handler) {
+        this.endGameListeners.add(handler);
+    }
+
+    private void onEndGame() {
+        for (EndGameHandler listener : this.endGameListeners) {
+            listener.endGame();
+        }
+    }
+
+    public interface EndGameHandler {
+        void endGame();
     }
 }
