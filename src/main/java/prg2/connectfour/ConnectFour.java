@@ -47,7 +47,7 @@ public class ConnectFour extends JFrame {
                     name = playerName;
                     if(mode == GameMode.NETWORK) {
                         initNetwork(playerName);
-                        initSearchPlayerScreen(playerName);
+                        initSearchPlayerScreen(playerName, x, y);
                         transition(homeScreen, searchPlayerScreen);
                     } else if(mode == GameMode.SINGLE) {
                         initSinglePlayGround(x, y);
@@ -66,8 +66,8 @@ public class ConnectFour extends JFrame {
         this.networkEnv.init(playerName);
     }
 
-    private void initSearchPlayerScreen(String playerName) {
-        this.searchPlayerScreen = new SearchPlayerScreen(this.networkEnv);
+    private void initSearchPlayerScreen(String playerName, int x, int y) {
+        this.searchPlayerScreen = new SearchPlayerScreen(this.networkEnv, x, y);
         this.searchPlayerScreen.addStartGameListener(new SearchPlayerScreen.StartGameHandler() {
                 @Override
                 public void startGame(InvitationMsg invitation, NetworkPlayer player, InvitationResponseMsg invitationResponse) {
