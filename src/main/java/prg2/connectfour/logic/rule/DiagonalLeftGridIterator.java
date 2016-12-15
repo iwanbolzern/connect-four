@@ -30,7 +30,7 @@ class DiagonalLeftGridIterator implements IGridIterator {
         for (int i = 0; i < maxIterations; ++i) {
             x -= 1;
             y += 1;
-            cells.add(grid.getCellAt(x, y));
+            cells.add(0, grid.getCellAt(x, y));
         }
 
         cells.removeIf(Objects::isNull);

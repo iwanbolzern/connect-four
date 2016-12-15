@@ -15,7 +15,7 @@ class HorizontalGridIterator implements IGridIterator {
         }
 
         for (int x = initialX - 1; x >= 0; --x) {
-            cells.add(grid.getCellAt(x, initialY));
+            cells.add(0, grid.getCellAt(x, initialY));
         }
 
         assert cells.size() == width;

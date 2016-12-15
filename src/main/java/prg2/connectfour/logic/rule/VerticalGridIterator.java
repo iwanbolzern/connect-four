@@ -15,7 +15,7 @@ class VerticalGridIterator implements IGridIterator {
         }
 
         for (int y = initialY - 1; y >= 0; --y) {
-            cells.add(grid.getCellAt(initialX, y));
+            cells.add(0, grid.getCellAt(initialX, y));
         }
 
         assert cells.size() == height;
