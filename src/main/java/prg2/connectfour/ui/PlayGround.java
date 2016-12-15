@@ -98,6 +98,7 @@ public class PlayGround extends JPanel implements MoveHandler {
                 enableButtons();
             }
         } else {
+            revalidate();
             showFinish();
             onEndGame();
         }
@@ -206,7 +207,7 @@ public class PlayGround extends JPanel implements MoveHandler {
             msg = this.game.getWinner().getName() + " is much better than you. Go home and cry.";
             title = "Loser";
         } else if (this.game.getWinner() instanceof GameTheory) {
-            msg = "Really, you're worser than a computer.";
+            msg = "Really, you're worse than a computer.";
             title = "Loser";
         } else {
             msg = "Well done!";
