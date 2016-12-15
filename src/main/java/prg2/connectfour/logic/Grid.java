@@ -74,34 +74,6 @@ public class Grid {
         return true;
     }
 
-    public int countFilledCells(int column) {
-        Stack<Pair<Player, Integer>> stack = IteratorReduction.reduceWithIterator(this, IGridIterator.Horizontal, column, 0);
-        int count = 0;
-        while (!stack.empty()) {
-            Pair<Player, Integer> pair = stack.pop();
-            if (pair.left != null)
-                count += pair.right;
-        }
-
-        return count;
-    }
-
-    public boolean checkCount(int column, int row, int count, Player player) {
-        for (IGridIterator iterator : IGridIterator.All) {
-            Stack<Pair<Player, Integer>> stack = IteratorReduction.reduceWithIterator(this, iterator, column, row);
-            while (!stack.empty()) {
-                Pair<Player, Integer> pair = stack.pop();
-                if (pair.left != player)
-                    continue;
-
-                if (pair.right == count)
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
     private int getIndex(int x, int y) {
         return (this.width * y) + x;
     }

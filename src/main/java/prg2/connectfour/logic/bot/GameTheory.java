@@ -3,13 +3,17 @@ package prg2.connectfour.logic.bot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Stack;
 
 import prg2.connectfour.logic.Color;
 import prg2.connectfour.logic.Grid;
 import prg2.connectfour.logic.Player;
+import prg2.connectfour.logic.rule.IGridIterator;
+import prg2.connectfour.logic.rule.IteratorReduction;
+import prg2.connectfour.utils.Pair;
 
 public class GameTheory extends Player {
-
+// Remove in final version
     private Player thisPlayer;
     private Player enemyPlayer;
     private Grid board;
@@ -21,7 +25,6 @@ public class GameTheory extends Player {
     private ArrayList<Integer> veryBadIdeas;
 
     public GameTheory(String name, Color color) {
-        // ToDo: Can't be the real solution
         super(name, color);
     }
 
@@ -35,7 +38,7 @@ public class GameTheory extends Player {
         this.maxRow = board.getHeight();
 
         if (board.isEmpty()) {
-            return 4; // Stein in mitte legen
+        	return this.maxColumn/2; // Stein in mitte legen
         }
 
         if (canIWin() >= 0) {
@@ -70,9 +73,8 @@ public class GameTheory extends Player {
 
     private int canIWin() {
         for (column = 0; column < maxColumn; column++) {
-            row = board.countFilledCells(column);
-            // if column is full, row = -1:
-            if (row != -1 && board.checkCount(column, row, 4, thisPlayer)) // CheckXInARow
+            row = this.countFilledCells(column);
+            if (row != maxRow && this.checkCount(column, row, 4, thisPlayer)) // CheckXInARow
                                                                                     // checks
                                                                                     // if
                                                                                     // X
@@ -94,9 +96,8 @@ public class GameTheory extends Player {
 
     private int canEnemyWin() {
         for (column = 0; column < maxColumn; column++) {
-            row = board.countFilledCells(column);
-            // if column is full, row = -1:
-            if (row != -1 && board.checkCount(column, row, 4, enemyPlayer)) // CheckXInARow
+            row = this.countFilledCells(column);
+            if (row != maxRow && this.checkCount(column, row, 4, enemyPlayer)) // CheckXInARow
                                                                                      // checks
                                                                                      // if
                                                                                      // X
@@ -118,15 +119,15 @@ public class GameTheory extends Player {
 
     private void detectSmartMoves() {
         for (column = 0; column < maxColumn; column++) {
-            row = board.countFilledCells(column);
+            row = this.countFilledCells(column);
 
-            if (row != -1 && board.checkCount(column, row, 3, enemyPlayer)) {
+            if (row != maxRow && this.checkCount(column, row, 3, enemyPlayer)) {
                 // Try to destroy enemies chances to win. In all of this moves
                 // the enemy can have 3 in a row
                 possibleSolutions.add(column);
             }
             if (possibleSolutions.isEmpty()) {
-                if (row != -1 && board.checkCount(column, row, 2, enemyPlayer)) {
+                if (row != maxRow && this.checkCount(column, row, 2, enemyPlayer)) {
                     // Enemy player can't have 3 in a row, so check for 2 in a
                     // row...
                     possibleSolutions.add(column);
@@ -141,8 +142,8 @@ public class GameTheory extends Player {
         int possibleColumn;
         while (solutionsItr.hasNext()) {
             possibleColumn = solutionsItr.next();
-            int nextRow = board.countFilledCells(possibleColumn) + 1;
-            if (nextRow < maxRow && board.checkCount(possibleColumn, nextRow, 4, enemyPlayer)) {
+            int nextRow = this.countFilledCells(possibleColumn) + 1;
+            if (nextRow < maxRow && this.checkCount(possibleColumn, nextRow, 4, enemyPlayer)) {
                 solutionsItr.remove();
             }
         }
@@ -152,7 +153,7 @@ public class GameTheory extends Player {
         // prefer solutions in the middle of field:
         int nrOfSolutions = possibleSolutions.size();
         for (int i = 0; i < nrOfSolutions; i++) {
-            if (possibleSolutions.get(i) > 1 && possibleSolutions.get(i) < 5)
+            if (possibleSolutions.get(i) > 1 && possibleSolutions.get(i) < (maxColumn -2))
                 possibleSolutions.add(possibleSolutions.get(i));
         }
     }
@@ -160,9 +161,37 @@ public class GameTheory extends Player {
     private void detectBadMoves() {
         for (int col = 0; col < maxColumn; col++) {
             // add moves that enable my enemy to win to veryBadIdeas
-            int nextRow = board.countFilledCells(col) + 1;
-            if (nextRow < maxRow && board.checkCount(col, nextRow, 4, enemyPlayer))
+            int nextRow = this.countFilledCells(col) + 1;
+            if (nextRow < maxRow && this.checkCount(col, nextRow, 4, enemyPlayer))
                 veryBadIdeas.add(col);
         }
+    }
+    
+    private int countFilledCells(int column) {
+        Stack<Pair<Player, Integer>> stack = IteratorReduction.reduceWithIterator(board, IGridIterator.Horizontal, column, 0);
+        int count = 0;
+        while (!stack.empty()) {
+            Pair<Player, Integer> pair = stack.pop();
+            if (pair.left != null)
+                count += pair.right;
+        }
+
+        return count;
+    }
+
+    private boolean checkCount(int column, int row, int count, Player player) {
+        for (IGridIterator iterator : IGridIterator.All) {
+            Stack<Pair<Player, Integer>> stack = IteratorReduction.reduceWithIterator(board, iterator, column, row);
+            while (!stack.empty()) {
+                Pair<Player, Integer> pair = stack.pop();
+                if (pair.left != player)
+                    continue;
+
+                if (pair.right == count)
+                    return true;
+            }
+        }
+
+        return false;
     }
 }
