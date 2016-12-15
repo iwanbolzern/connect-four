@@ -1,5 +1,7 @@
 package prg2.connectfour.logic;
 
+import java.util.ArrayList;
+
 public class GameFactory {
     public static GameFactorySyntax create() {
         return new GameFactorySyntax();
@@ -8,10 +10,12 @@ public class GameFactory {
     public static class GameFactorySyntax {
         private Player[] players;
         private Grid grid;
+        private ArrayList<Turn> turns;
 
         GameFactorySyntax() {
             this.players = new Player[0];
             this.grid = new Grid(0, 0);
+            this.turns = new ArrayList<>();
         }
 
         public GameFactorySyntax withPlayers(Player... players) {
@@ -24,8 +28,15 @@ public class GameFactory {
             return this;
         }
 
+        public GameFactorySyntax withTurns(ArrayList<Turn> turns) {
+            this.turns = turns;
+            return this;
+        }
+
         public Game finish() {
-            return new Game(this.players, this.grid);
+            Game game = new Game(this.players, this.grid);
+            game.importTurns(this.turns);
+            return game;
         }
     }
 }

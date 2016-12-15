@@ -2,17 +2,21 @@ package prg2.connectfour.logic;
 
 import prg2.connectfour.logic.rule.IteratorWinRule;
 
+import java.util.ArrayList;
+
 public class Game {
     private Grid grid;
     private Player winner;
     private Player[] players;
     private int playerIndex;
     private int playerCount;
+    private ArrayList<Turn> turns;
 
     Game(Player[] players, Grid grid) {
         this.grid = grid;
         this.playerCount = players.length;
         this.players = players;
+        this.turns = new ArrayList<>();
     }
 
     public boolean isFinished() {
@@ -44,6 +48,8 @@ public class Game {
         if (!grid.dropOnColumn(player, column))
             return false;
 
+        turns.add(new Turn(playerIndex, column));
+
         nextPlayer();
         detectWinner();
         return true;
@@ -61,5 +67,24 @@ public class Game {
 
     public boolean dropOnColumn(int column) {
         return dropOnColumn(getActivePlayer(), column);
+    }
+
+    void importTurns(ArrayList<Turn> turns) {
+        for (Turn turn : turns) {
+            boolean ret = this.dropOnColumn(this.players[turn.playerIndex], turn.column);
+            assert ret : "Invalid Turn";
+        }
+    }
+
+    public ArrayList<Turn> getTurns() {
+        return this.turns;
+    }
+
+    public int getGridWidth() {
+        return this.grid.getWidth();
+    }
+
+    public int getGridHeight() {
+        return this.grid.getHeight();
     }
 }
