@@ -10,7 +10,7 @@ public class Game {
     private Player[] players;
     private int playerIndex;
     private int playerCount;
-    private ArrayList<Turn> turns;
+    private ArrayList<Integer> turns;
 
     Game(Player[] players, Grid grid) {
         this.grid = grid;
@@ -48,7 +48,7 @@ public class Game {
         if (!grid.dropOnColumn(player, column))
             return false;
 
-        turns.add(new Turn(playerIndex, column));
+        turns.add(column);
 
         nextPlayer();
         detectWinner();
@@ -69,14 +69,14 @@ public class Game {
         return dropOnColumn(getActivePlayer(), column);
     }
 
-    void importTurns(ArrayList<Turn> turns) {
-        for (Turn turn : turns) {
-            boolean ret = this.dropOnColumn(this.players[turn.playerIndex], turn.column);
+    void importTurns(ArrayList<Integer> turns) {
+        for (int turn : turns) {
+            boolean ret = this.dropOnColumn(turn);
             assert ret : "Invalid Turn";
         }
     }
 
-    public ArrayList<Turn> getTurns() {
+    public ArrayList<Integer> getTurns() {
         return this.turns;
     }
 

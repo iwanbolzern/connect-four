@@ -10,7 +10,7 @@ public class GameFactory {
     public static class GameFactorySyntax {
         private Player[] players;
         private Grid grid;
-        private ArrayList<Turn> turns;
+        private ArrayList<Integer> turns;
 
         GameFactorySyntax() {
             this.players = new Player[0];
@@ -28,7 +28,7 @@ public class GameFactory {
             return this;
         }
 
-        public GameFactorySyntax withTurns(ArrayList<Turn> turns) {
+        public GameFactorySyntax withTurns(ArrayList<Integer> turns) {
             this.turns = turns;
             return this;
         }
