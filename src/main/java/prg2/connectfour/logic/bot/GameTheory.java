@@ -13,8 +13,6 @@ import prg2.connectfour.logic.rule.IteratorReduction;
 import prg2.connectfour.utils.Pair;
 
 public class GameTheory extends Player {
-// Remove in final version
-    private Player thisPlayer;
     private Player enemyPlayer;
     private Grid board;
     private int maxColumn;
@@ -26,12 +24,13 @@ public class GameTheory extends Player {
 
     public GameTheory(String name, Color color) {
         super(name, color);
+        this.enemyPlayer = new Player("Awesome dude", Color.Red);
     }
 
     public int getNextMove(Grid newBoard) {
 
         this.board = newBoard;
-
+        //this.enemyPlayer = new Player("Awesome dude", Color.Red);
         this.possibleSolutions = new ArrayList<Integer>();
         this.veryBadIdeas = new ArrayList<Integer>();
         this.maxColumn = board.getWidth();
@@ -67,14 +66,18 @@ public class GameTheory extends Player {
             Collections.shuffle(veryBadIdeas);
             return (int) veryBadIdeas.get(0);
         }
-
-        return column;
+        
+        for(column=0; column < maxColumn; column ++){
+        	if(this.countFilledCells(column) < maxRow)
+        		return column;
+        }
+        return 0; // Should never happen!
     }
 
     private int canIWin() {
         for (column = 0; column < maxColumn; column++) {
             row = this.countFilledCells(column);
-            if (row != maxRow && this.checkCount(column, row, 4, thisPlayer)) // CheckXInARow
+            if (row != maxRow && this.checkCount(column, row, 3, this)) // CheckXInARow
                                                                                     // checks
                                                                                     // if
                                                                                     // X
@@ -97,7 +100,7 @@ public class GameTheory extends Player {
     private int canEnemyWin() {
         for (column = 0; column < maxColumn; column++) {
             row = this.countFilledCells(column);
-            if (row != maxRow && this.checkCount(column, row, 4, enemyPlayer)) // CheckXInARow
+            if (row != maxRow && this.checkCount(column, row, 3, enemyPlayer)) // CheckXInARow
                                                                                      // checks
                                                                                      // if
                                                                                      // X
@@ -121,13 +124,13 @@ public class GameTheory extends Player {
         for (column = 0; column < maxColumn; column++) {
             row = this.countFilledCells(column);
 
-            if (row != maxRow && this.checkCount(column, row, 3, enemyPlayer)) {
+            if (row != maxRow && this.checkCount(column, row, 2, enemyPlayer)) {
                 // Try to destroy enemies chances to win. In all of this moves
                 // the enemy can have 3 in a row
                 possibleSolutions.add(column);
             }
             if (possibleSolutions.isEmpty()) {
-                if (row != maxRow && this.checkCount(column, row, 2, enemyPlayer)) {
+                if (row != maxRow && this.checkCount(column, row, 1, enemyPlayer)) {
                     // Enemy player can't have 3 in a row, so check for 2 in a
                     // row...
                     possibleSolutions.add(column);
@@ -143,7 +146,7 @@ public class GameTheory extends Player {
         while (solutionsItr.hasNext()) {
             possibleColumn = solutionsItr.next();
             int nextRow = this.countFilledCells(possibleColumn) + 1;
-            if (nextRow < maxRow && this.checkCount(possibleColumn, nextRow, 4, enemyPlayer)) {
+            if (nextRow < maxRow && this.checkCount(possibleColumn, nextRow, 3, enemyPlayer)) {
                 solutionsItr.remove();
             }
         }
@@ -162,13 +165,13 @@ public class GameTheory extends Player {
         for (int col = 0; col < maxColumn; col++) {
             // add moves that enable my enemy to win to veryBadIdeas
             int nextRow = this.countFilledCells(col) + 1;
-            if (nextRow < maxRow && this.checkCount(col, nextRow, 4, enemyPlayer))
+            if (nextRow < maxRow && this.checkCount(col, nextRow, 3, enemyPlayer))
                 veryBadIdeas.add(col);
         }
     }
     
     private int countFilledCells(int column) {
-        Stack<Pair<Player, Integer>> stack = IteratorReduction.reduceWithIterator(board, IGridIterator.Horizontal, column, 0);
+        Stack<Pair<Player, Integer>> stack = IteratorReduction.reduceWithIterator(board, IGridIterator.Vertical, column, 0);
         int count = 0;
         while (!stack.empty()) {
             Pair<Player, Integer> pair = stack.pop();
@@ -184,9 +187,11 @@ public class GameTheory extends Player {
             Stack<Pair<Player, Integer>> stack = IteratorReduction.reduceWithIterator(board, iterator, column, row);
             while (!stack.empty()) {
                 Pair<Player, Integer> pair = stack.pop();
-                if (pair.left != player)
-                    continue;
-
+                if(pair.left == null){
+                	continue;
+                }else if (!pair.left.getClass().equals(player.getClass())) {
+					continue;
+				}
                 if (pair.right == count)
                     return true;
             }
