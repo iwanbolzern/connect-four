@@ -25,11 +25,10 @@ public class SaveManager {
         writer.write(game.getGridWidth());
         writer.write(game.getGridHeight());
 
-        ArrayList<Turn> turns = game.getTurns();
+        ArrayList<Integer> turns = game.getTurns();
         writer.write(turns.size());
-        for (Turn turn : turns) {
-            writer.write(turn.playerIndex);
-            writer.write(turn.column);
+        for (int turn : turns) {
+            writer.write(turn);
         }
 
         writer.close();
@@ -56,12 +55,14 @@ public class SaveManager {
         try {
             int width = reader.read();
             int height = reader.read();
-            ArrayList<Turn> turns = new ArrayList<>();
+            ArrayList<Integer> turns = new ArrayList<>();
 
             int size = reader.read();
             for (int i = 0; i < size; i++) {
-                turns.add(new Turn(reader.read(), reader.read()));
+                turns.add(reader.read());
             }
+
+            reader.close();
 
             Grid grid = new Grid(width, height);
             return GameFactory
