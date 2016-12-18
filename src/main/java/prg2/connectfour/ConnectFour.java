@@ -1,10 +1,16 @@
 package prg2.connectfour;
 
+import java.io.IOException;
+
 import java.awt.Dimension;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;
 
 import javax.swing.*;
 
 import prg2.connectfour.logic.Color;
+import prg2.connectfour.logic.Game;
+import prg2.connectfour.logic.Player;
 import prg2.connectfour.logic.bot.GameTheory;
 import prg2.connectfour.ui.HomeScreen;
 import prg2.connectfour.ui.PlayGround;
@@ -17,9 +23,12 @@ import prg2.connectfour.comlayer.InvitationResponseMsg;
 import prg2.connectfour.comlayer.InvitationMsg;
 import prg2.connectfour.comlayer.NetworkPlayer;
 import prg2.connectfour.comlayer.NetworkEnv;
+import prg2.connectfour.persistence.SaveManager;
+import prg2.connectfour.persistence.SaveFileProvider;
 
 public class ConnectFour extends JFrame {
     private NetworkEnv networkEnv;
+    private SaveManager saveManager;
 
     // Screens
     private HomeScreen homeScreen;
@@ -28,8 +37,26 @@ public class ConnectFour extends JFrame {
     private String name;
 
     private ConnectFour() {
-        initHomeScreen();
-        add(homeScreen);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setTitle("Connect four - Have fun");
+        this.setPreferredSize(new Dimension(800, 600));
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.pack();
+        this.setVisible(true);
+        this.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent we) {
+                    try {
+                        saveManager.save(playGround.getGame());
+                    } catch (IOException e) {
+
+                    }
+                }
+            });
+        this.saveManager = new SaveManager(new SaveFileProvider());
+        this.initHomeScreen();
+        this.add(this.homeScreen);
+        this.revalidate();
     }
 
     private void transition(JPanel from, JPanel to) {
@@ -39,8 +66,8 @@ public class ConnectFour extends JFrame {
     }
 
     private void initHomeScreen() {
-        homeScreen = new HomeScreen();
-        homeScreen.addPlayListener(new HomeScreen.PlayHandler() {
+        this.homeScreen = new HomeScreen(this.saveManager.hasSave());
+        this.homeScreen.addPlayListener(new HomeScreen.PlayHandler() {
                 @Override
                 public void onPlayClicked(HomeScreen.GameMode mode,
                                           String playerName, int x, int y) {
@@ -50,10 +77,16 @@ public class ConnectFour extends JFrame {
                         initSearchPlayerScreen(playerName, x, y);
                         transition(homeScreen, searchPlayerScreen);
                     } else if(mode == GameMode.SINGLE) {
-                        initSinglePlayGround(x, y);
+                        initSinglePlayGround(x, y, null);
                         transition(homeScreen, playGround);
                     } else if(mode == GameMode.LOAD_GAME) {
-                        // TODO: implement load game
+                        // Add some pseudo players, for game factory. Will be
+                        // overwritten later in PlayGround.
+                        Game game = saveManager.load(new Player("", Color.Red),
+                                                     new Player("", Color.Yellow));
+                        initSinglePlayGround(game.getGridWidth(),
+                                             game.getGridHeight(), game);
+                        transition(homeScreen, playGround);
                     } else {
                         throw new IllegalArgumentException("Game mode not known");
                     }
@@ -102,10 +135,10 @@ public class ConnectFour extends JFrame {
             });
     }
 
-    private void initSinglePlayGround(int x, int y) {
+    private void initSinglePlayGround(int x, int y, Game game) {
         this.playGround = new PlayGround(x, y, name);
         GameTheory bot = new GameTheory("Best of all", Color.Yellow);
-        this.playGround.singleInit(bot);
+        this.playGround.singleInit(game, bot);
         this.playGround.addEndGameListener(new PlayGround.EndGameHandler() {
                 @Override
                 public void endGame() {
@@ -118,11 +151,5 @@ public class ConnectFour extends JFrame {
     public static void main(String[] args) {
         JFrame.setDefaultLookAndFeelDecorated(true);
         JFrame mainFrame = new ConnectFour();
-        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        mainFrame.setTitle("Connect four - Have fun");
-        mainFrame.setPreferredSize(new Dimension(800, 600));
-        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        mainFrame.pack();
-        mainFrame.setVisible(true);
     }
 }

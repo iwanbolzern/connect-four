@@ -14,8 +14,7 @@ public class Game {
 
     Game(Player[] players, Grid grid) {
         this.grid = grid;
-        this.playerCount = players.length;
-        this.players = players;
+        this.setPlayers(players);
         this.turns = new ArrayList<>();
     }
 
@@ -86,5 +85,14 @@ public class Game {
 
     public int getGridHeight() {
         return this.grid.getHeight();
+    }
+
+    public Grid getGrid() {
+        return this.grid;
+    }
+
+    public void setPlayers(Player[] players) {
+        this.players = players;
+        this.playerCount = players.length;
     }
 }

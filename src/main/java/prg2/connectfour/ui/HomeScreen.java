@@ -40,7 +40,7 @@ public class HomeScreen extends JPanel implements ActionListener {
         "Please type a column count and a row count larger than 3.";
     private JLabel errorMessage;
 
-    public HomeScreen() {
+    public HomeScreen(boolean hasSave) {
         this.setLayout(new BorderLayout(10, 10));
         this.font = new Font("Arial", Font.PLAIN, 36);
 
@@ -75,6 +75,7 @@ public class HomeScreen extends JPanel implements ActionListener {
         this.networkButton = new JButton("Multiplayer");
         this.singleButton = new JButton("Single player");
         this.loadGameButton = new JButton("Load game");
+        this.loadGameButton.setEnabled(hasSave);
 
         this.networkButton.setFont(font);
         this.singleButton.setFont(font);

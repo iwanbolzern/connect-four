@@ -52,8 +52,14 @@ public class PlayGround extends JPanel implements MoveHandler {
         this.grid = new Grid(x, y);
     }
 
-    private void initGame() {
-        this.game = GameFactory.create().withGrid(this.grid).withPlayers(this.players).finish();
+    private void initGame(Game game) {
+        if (game != null) {
+            this.game = game;
+            this.grid = game.getGrid();
+            this.game.setPlayers(this.players);
+        } else {
+            this.game = GameFactory.create().withGrid(this.grid).withPlayers(this.players).finish();
+        }
         initComponents();
         revalidate();
     }
@@ -69,14 +75,14 @@ public class PlayGround extends JPanel implements MoveHandler {
             this.players[0] = player;
         }
 
-        initGame();
+        initGame(null);
         processNext();
     }
 
-    public void singleInit(GameTheory bot) {
+    public void singleInit(Game game, GameTheory bot) {
         this.players[1] = bot;
 
-        initGame();
+        initGame(game);
         processNext();
     }
 
@@ -215,6 +221,10 @@ public class PlayGround extends JPanel implements MoveHandler {
         }
         JOptionPane.showMessageDialog(this, msg, title, JOptionPane.INFORMATION_MESSAGE);
 
+    }
+
+    public Game getGame() {
+        return this.game;
     }
 
     public void addEndGameListener(EndGameHandler handler) {
