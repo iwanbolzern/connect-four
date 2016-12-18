@@ -44,6 +44,19 @@ public class UdpConnection {
             e.printStackTrace();
         }
     }
+    
+    public void dispose() {
+    	isListening = false;
+    	this.socket.close();
+    	try {
+			this.listenThread.join(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} finally {
+			this.socket = null;
+			this.listenThread = null;
+		}
+    }
 
     public void registerMsgReceiver(MsgReceiver receiver) {
         this.receivers.add(receiver);

@@ -34,6 +34,19 @@ public class NetworkEnv {
         this.playerName = playerName;
         initUdpConnection();
     }
+    
+    public void dispose() {
+    	this.udpConnection.dispose();
+    	
+    	activeConnections.clear();
+    	pendingInvitations.clear();
+    	
+    	playerListeners.clear();
+    	invitationListeners.clear();
+    	invitationResponseListeners.clear();
+    	startGameListeners.clear();
+    	moveListeners.clear();
+    }
 
     private void initUdpConnection() {
         for (int port = lowerPortRange; port <= upperPortRange; port++) {

@@ -129,7 +129,9 @@ public class ConnectFour extends JFrame {
         this.playGround.addEndGameListener(new PlayGround.EndGameHandler() {
                 @Override
                 public void endGame() {
-                    initHomeScreen();
+                    networkEnv.dispose();
+                    networkEnv = null;
+                	initHomeScreen();
                     transition(playGround, homeScreen);
                 }
             });
