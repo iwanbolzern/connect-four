@@ -23,11 +23,11 @@ public class IteratorWinRuleTest {
     }
 
     private void prepareGrid(String... lines) {
-        assert lines.length == this.grid.getHeight();
+        assert lines.length == this.grid.height;
 
-        for (int y = this.grid.getHeight() - 1; y >= 0; --y) {
+        for (int y = this.grid.height - 1; y >= 0; --y) {
             char[] chars = lines[y].toCharArray();
-            assert chars.length == this.grid.getWidth();
+            assert chars.length == this.grid.width;
 
             for (int x = 0; x < chars.length; x++) {
                 int num = chars[x] - '0';

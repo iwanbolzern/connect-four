@@ -112,8 +112,8 @@ public class PlayGround extends JPanel implements MoveHandler {
     }
 
     private void enableButtons() {
-        for (int x = 0; x < this.grid.getWidth(); x++) {
-            Cell cell = this.grid.getCellAt(x, this.grid.getHeight() - 1);
+        for (int x = 0; x < this.grid.width; x++) {
+            Cell cell = this.grid.getCellAt(x, this.grid.height - 1);
             if (cell.getOwner() == null) {
                 this.buttons[x].setEnabled(true);
             }
@@ -141,11 +141,11 @@ public class PlayGround extends JPanel implements MoveHandler {
 
     private void drawButtons() {
         this.buttonPanel = new JPanel();
-        this.buttonPanel.setLayout(new GridLayout(1, this.grid.getWidth()));
+        this.buttonPanel.setLayout(new GridLayout(1, this.grid.width));
 
-        this.buttons = new JButton[this.grid.getWidth()];
+        this.buttons = new JButton[this.grid.width];
 
-        for (int i = 0; i < this.grid.getWidth(); i++) {
+        for (int i = 0; i < this.grid.width; i++) {
             buttons[i] = new JButton("" + (i + 1));
             buttons[i].setFont(this.font);
             Dimension d = buttons[i].getPreferredSize();
@@ -171,12 +171,12 @@ public class PlayGround extends JPanel implements MoveHandler {
         else
             this.gridPanel = new JPanel();
 
-        this.gridPanel.setLayout(new GridLayout(this.grid.getHeight(), this.grid.getWidth()));
+        this.gridPanel.setLayout(new GridLayout(this.grid.height, this.grid.width));
 
-        this.slots = new JLabel[this.grid.getHeight()][this.grid.getWidth()];
+        this.slots = new JLabel[this.grid.height][this.grid.width];
 
-        for (int row = this.grid.getHeight() - 1; row >= 0; row--) {
-            for (int column = 0; column < this.grid.getWidth(); column++) {
+        for (int row = this.grid.height - 1; row >= 0; row--) {
+            for (int column = 0; column < this.grid.width; column++) {
 
                 slots[row][column] = new JLabel();
                 slots[row][column].setHorizontalAlignment(SwingConstants.CENTER);

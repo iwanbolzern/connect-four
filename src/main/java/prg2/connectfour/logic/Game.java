@@ -80,11 +80,11 @@ public class Game {
     }
 
     public int getGridWidth() {
-        return this.grid.getWidth();
+        return this.grid.width;
     }
 
     public int getGridHeight() {
-        return this.grid.getHeight();
+        return this.grid.height;
     }
 
     public Grid getGrid() {

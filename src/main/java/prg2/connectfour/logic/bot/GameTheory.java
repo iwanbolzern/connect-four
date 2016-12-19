@@ -33,8 +33,8 @@ public class GameTheory extends Player {
         //this.enemyPlayer = new Player("Awesome dude", Color.Red);
         this.possibleSolutions = new ArrayList<Integer>();
         this.veryBadIdeas = new ArrayList<Integer>();
-        this.maxColumn = board.getWidth();
-        this.maxRow = board.getHeight();
+        this.maxColumn = board.width;
+        this.maxRow = board.height;
 
         if (board.isEmpty()) {
         	return this.maxColumn/2; // Stein in mitte legen

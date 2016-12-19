@@ -8,9 +8,7 @@ import java.util.ArrayList;
 class VerticalGridIterator implements IGridIterator {
     public Iterable<Cell> getCells(Grid grid, int initialX, int initialY) {
         ArrayList<Cell> cells = new ArrayList<>();
-        int height = grid.getHeight();
-
-        for (int y = initialY; y < height; ++y) {
+        for (int y = initialY; y < grid.height; ++y) {
             cells.add(grid.getCellAt(initialX, y));
         }
 
@@ -18,7 +16,7 @@ class VerticalGridIterator implements IGridIterator {
             cells.add(0, grid.getCellAt(initialX, y));
         }
 
-        assert cells.size() == height;
+        assert cells.size() == grid.height;
 
         return cells;
     }

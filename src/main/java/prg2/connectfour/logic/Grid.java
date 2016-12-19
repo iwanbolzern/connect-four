@@ -1,14 +1,15 @@
 package prg2.connectfour.logic;
 
-import prg2.connectfour.logic.rule.IGridIterator;
-import prg2.connectfour.logic.rule.IteratorReduction;
-import prg2.connectfour.utils.Pair;
+import java.util.Arrays;
 
-import java.util.Stack;
-
+/**
+ * Represents the grid of the connect-four game
+ *
+ * @author Marius Schuler {@literal <binarytenshi@gmail.com>}
+ */
 public class Grid {
-    private int width;
-    private int height;
+    public final int width;
+    public final int height;
 
     private Cell[] cells;
 
@@ -23,6 +24,13 @@ public class Grid {
         }
     }
 
+    /**
+     * Returns the cell at the given coordinates
+     *
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @return Cell at (x,y)
+     */
     public Cell getCellAt(int x, int y) {
         if (x < 0 || x >= this.width)
             return null;
@@ -33,6 +41,13 @@ public class Grid {
         return cells[getIndex(x, y)];
     }
 
+    /**
+     * 'Drops' the given player on the given column
+     *
+     * @param player Player
+     * @param column Column
+     * @return <code>true</code> if the drop was successful; <code>false</code> otherwise
+     */
     public boolean dropOnColumn(Player player, int column) {
         if (column < 0 || column > this.width)
             return false;
@@ -48,32 +63,31 @@ public class Grid {
         return false;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
+    /**
+     * Determines if the grid is full
+     *
+     * @return full
+     */
     public boolean isFull() {
-        for (Cell cell : this.cells) {
-            if (cell.getOwner() == null)
-                return false;
-        }
-
-        return true;
+        return Arrays.stream(this.cells).allMatch(x -> x.getOwner() != null);
     }
 
+    /**
+     * Determines if the grid is empty
+     *
+     * @return empty
+     */
     public boolean isEmpty() {
-        for (Cell cell : this.cells) {
-            if (cell.getOwner() != null)
-                return false;
-        }
-
-        return true;
+        return Arrays.stream(this.cells).allMatch(x -> x.getOwner() == null);
     }
 
+    /**
+     * Returns the array index of the given position
+     *
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @return Array position of (x,y)
+     */
     private int getIndex(int x, int y) {
         return (this.width * y) + x;
     }

@@ -10,10 +10,7 @@ class DiagonalRightGridIterator implements IGridIterator {
     @Override
     public Iterable<Cell> getCells(Grid grid, int initialX, int initialY) {
         ArrayList<Cell> cells = new ArrayList<>();
-        int width = grid.getWidth();
-        int height = grid.getHeight();
-
-        int maxIterations = Math.min(width, height);
+        int maxIterations = Math.min(grid.width, grid.height);
 
         cells.add(grid.getCellAt(initialX, initialY));
 
