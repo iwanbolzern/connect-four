@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Response for InvitationMsg
- * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+ * @author Iwan Bolzern {@literal <iwan.bolzern@ihomelab.ch>}
  */
 public class InvitationResponseMsg extends Msg implements Serializable {
 
@@ -24,7 +24,7 @@ public class InvitationResponseMsg extends Msg implements Serializable {
 
     /**
      * Sets secure invitation token
-     * @param secure invitation token
+     * @param token secure invitation token
      */
     public void setInvitationToken(String token) {
         this.invitationToken = token;

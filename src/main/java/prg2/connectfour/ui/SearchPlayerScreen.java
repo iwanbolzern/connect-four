@@ -26,7 +26,7 @@ import prg2.connectfour.utils.Pair;
  * from. A player can be selected to send an invitation
  * request.
  *
- * @author David Craven <david@craven.ch>
+ * @author David Craven {@literal <david@craven.ch>}
  */
 public class SearchPlayerScreen extends JPanel
         implements PlayerHandler, InvitationHandler, InvitationResponseHandler {
@@ -50,6 +50,10 @@ public class SearchPlayerScreen extends JPanel
      * The constructor initializes the UI and registers event listeners
      * for the network interface. After initialization the constructor
      * starts a search for possible opponents.
+     *
+     * @param env Network environment
+     * @param x X coordinate
+     * @param y Y coordinate
      */
     public SearchPlayerScreen(NetworkEnv env, int x, int y) {
         this.networkEnv = env;
@@ -94,6 +98,8 @@ public class SearchPlayerScreen extends JPanel
      * Event handler for the newPlayerDetected event. It adds the
      * player to the invitationTokens HashMap and inserts a new
      * player into the UI.
+     *
+     * @param newPlayer New player
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -107,6 +113,8 @@ public class SearchPlayerScreen extends JPanel
      * message dialog to accept or reject an invitation and sends
      * an invitation response. An invitation response is also sent
      * when rejected.
+     *
+     * @param msg Invitation message
      */
     @Override
     public void invitationReceived(InvitationMsg msg) {
@@ -125,6 +133,9 @@ public class SearchPlayerScreen extends JPanel
     /**
      * Event handler for the invitationResponseReceived event. It starts
      * a new game.
+     *
+     * @param msg Invitation response
+     * @param invitation Invitation message
      */
     @Override
     public void invitationResponseReceived(InvitationResponseMsg msg, InvitationMsg invitation) {

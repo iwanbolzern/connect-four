@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Response to a new received @see HelloMsg 
- * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+ * @author Iwan Bolzern {@literal <iwan.bolzern@ihomelab.ch>}
  */
 public class HelloResponseMsg extends HelloMsg implements Serializable {
 

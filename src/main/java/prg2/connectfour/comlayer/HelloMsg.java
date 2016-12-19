@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Message which is sent to inform other players that new player is available
- * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+ * @author Iwan Bolzern {@literal <iwan.bolzern@ihomelab.ch>}
  */
 public class HelloMsg extends Msg implements Serializable  {
 	
@@ -23,7 +23,7 @@ public class HelloMsg extends Msg implements Serializable  {
 	
 	/** 
 	 * Sets players name
-	 * @param players name
+	 * @param name players name
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -39,7 +39,7 @@ public class HelloMsg extends Msg implements Serializable  {
 	
 	/**
 	 * Sets UDP port where server is listening
-	 * @param listening UDP port
+	 * @param port listening UDP port
 	 */
 	public void setPort(int port) {
 		this.port = port;

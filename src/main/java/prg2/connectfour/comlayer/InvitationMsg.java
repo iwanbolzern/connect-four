@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Message which is sent to a possible opponent
- * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+ * @author Iwan Bolzern {@literal <iwan.bolzern@ihomelab.ch>}
  */
 public class InvitationMsg extends Msg implements Serializable {
 	private static final long serialVersionUID = -4175829652467899771L;
@@ -24,7 +24,7 @@ public class InvitationMsg extends Msg implements Serializable {
 
 	/**
 	 * Sets secure invitation token
-	 * @param secure invitation token
+	 * @param token secure invitation token
 	 */
 	public void setInvitationToken(String token) {
 		this.invitationToken = token;
@@ -56,7 +56,7 @@ public class InvitationMsg extends Msg implements Serializable {
 
 	/**
 	 * Sets height of playground
-	 * @param y heigt of playground
+	 * @param y height of playground
 	 */
 	public void setY(int y) {
 		this.y = y;

@@ -5,7 +5,7 @@ import java.net.InetAddress;
 
 /**
  * Base class for every message which is sent with comlayer package
- * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+ * @author Iwan Bolzern {@literal <iwan.bolzern@ihomelab.ch>}
  */
 public class Msg implements Serializable {
 	private transient InetAddress ipAddress;

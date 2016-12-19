@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Message which is sent for every drop (move) during the game
- * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+ * @author Iwan Bolzern {@literal <iwan.bolzern@ihomelab.ch>}
  */
 public class MoveMsg extends Msg implements Serializable {
     private static final long serialVersionUID = -6056126601687864227L;
