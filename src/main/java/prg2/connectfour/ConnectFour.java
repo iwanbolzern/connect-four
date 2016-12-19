@@ -84,8 +84,8 @@ public class ConnectFour extends JFrame {
                         // overwritten later in PlayGround.
                         Game game = saveManager.load(new Player("", Color.Red),
                                                      new Player("", Color.Yellow));
-                        initSinglePlayGround(game.getGridWidth(),
-                                             game.getGridHeight(), game);
+                        initSinglePlayGround(game.grid.width,
+                                             game.grid.height, game);
                         transition(homeScreen, playGround);
                     } else {
                         throw new IllegalArgumentException("Game mode not known");

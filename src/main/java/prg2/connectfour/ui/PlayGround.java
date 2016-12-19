@@ -55,7 +55,7 @@ public class PlayGround extends JPanel implements MoveHandler {
     private void initGame(Game game) {
         if (game != null) {
             this.game = game;
-            this.grid = game.getGrid();
+            this.grid = game.grid;
             this.game.setPlayers(this.players);
         } else {
             this.game = GameFactory.create().withGrid(this.grid).withPlayers(this.players).finish();

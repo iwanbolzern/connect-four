@@ -22,8 +22,8 @@ public class SaveManager {
             file.createNewFile();
 
         FileWriter writer = new FileWriter(file, false);
-        writer.write(game.getGridWidth());
-        writer.write(game.getGridHeight());
+        writer.write(game.grid.width);
+        writer.write(game.grid.height);
 
         ArrayList<Integer> turns = game.getTurns();
         writer.write(turns.size());
