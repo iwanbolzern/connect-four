@@ -1,5 +1,8 @@
 package prg2.connectfour.logic;
 
+/**
+ * Represents a cell on the {@link Grid}
+ */
 public class Cell {
     private Player owner;
 
@@ -7,7 +10,7 @@ public class Cell {
         return this.owner;
     }
 
-    public void setOwner(Player owner) {
+    void setOwner(Player owner) {
         this.owner = owner;
     }
 }
