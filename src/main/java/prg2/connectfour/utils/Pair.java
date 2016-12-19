@@ -1,9 +1,15 @@
 package prg2.connectfour.utils;
 
+/**
+ * Simple pair structure
+ *
+ * @param <L> Left
+ * @param <R> Right
+ */
 public class Pair<L, R> {
     public final L left;
     public final R right;
-    
+
     public Pair(L left, R right) {
         this.left = left;
         this.right = right;
@@ -23,5 +29,4 @@ public class Pair<L, R> {
         return left.equals(pair.left) &&
                 right.equals(pair.right);
     }
-
 }

@@ -4,24 +4,18 @@ import java.io.*;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
+/**
+ * Various utilities
+ *
+ * @author Iwan Bolzern {@literal <iwan.bolzern@ihomelab.ch>}
+ */
 public class Utils {
-    public static byte[] joinArray(byte[]... arrays) {
-        int length = 0;
-        for (byte[] array : arrays) {
-            length += array.length;
-        }
-
-        byte[] result = new byte[length];
-
-        int offset = 0;
-        for (byte[] array : arrays) {
-            System.arraycopy(array, 0, result, offset, array.length);
-            offset += array.length;
-        }
-
-        return result;
-    }
-
+    /**
+     * Serializes a given object into a byte array
+     *
+     * @param serializable Object
+     * @return Bytes
+     */
     public static byte[] getByteArrayFromObject(Serializable serializable) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutput out;
@@ -43,6 +37,13 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Deserializes a byte array into an object
+     *
+     * @param bytes Bytes
+     * @return Object
+     * @throws ClassNotFoundException Class is not known
+     */
     public static Object getObjectFromByteArray(byte[] bytes) throws ClassNotFoundException {
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
         ObjectInput in = null;
@@ -63,6 +64,11 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Generates a secure random token
+     *
+     * @return Secure token
+     */
     public static String generateSecureToken() {
         SecureRandom random = new SecureRandom();
         return new BigInteger(130, random).toString(32);
