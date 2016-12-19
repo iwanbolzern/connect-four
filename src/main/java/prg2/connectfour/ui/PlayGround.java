@@ -184,9 +184,9 @@ public class PlayGround extends JPanel implements MoveHandler {
                 slots[row][column].setOpaque(true);
                 Cell cell = this.grid.getCellAt(column, row);
                 if (cell.getOwner() != null) {
-                    if (cell.getOwner().getColor() == Color.Red) {
+                    if (cell.getOwner().color == Color.Red) {
                         slots[row][column].setBackground(java.awt.Color.red);
-                    } else if (cell.getOwner().getColor() == Color.Yellow) {
+                    } else if (cell.getOwner().color == Color.Yellow) {
                         slots[row][column].setBackground(java.awt.Color.yellow);
                     } else
                         throw new IllegalArgumentException("Player color unknown");
@@ -210,7 +210,7 @@ public class PlayGround extends JPanel implements MoveHandler {
             title = "Draw";
         }
         else if (this.game.getWinner() instanceof NetworkPlayer) {
-            msg = this.game.getWinner().getName() + " is much better than you. Go home and cry.";
+            msg = this.game.getWinner().name + " is much better than you. Go home and cry.";
             title = "Loser";
         } else if (this.game.getWinner() instanceof GameTheory) {
             msg = "Really, you're worse than a computer.";

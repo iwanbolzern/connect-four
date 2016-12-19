@@ -1,21 +1,16 @@
 package prg2.connectfour.logic;
 
-import prg2.connectfour.logic.Color;
-
+/**
+ * Represents a player
+ *
+ * @author Marius Schuler {@literal <binarytenshi@gmail.com>}
+ */
 public class Player {
-    private Color color;
-    private String name;
+    public final Color color;
+    public final String name;
 
     public Player(String name, Color color) {
         this.color = color;
         this.name = name;
-    }
-    
-    public String getName() {
-        return name;
-    }
-
-    public Color getColor() {
-        return this.color;
     }
 }

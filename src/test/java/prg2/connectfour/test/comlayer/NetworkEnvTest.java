@@ -56,7 +56,7 @@ public class NetworkEnvTest {
         Assert.assertNotNull(playerOne);
         Assert.assertNotNull(playerTwo);
 
-        Assert.assertEquals(playerOne.getName(), "Iwan");
-        Assert.assertEquals(playerTwo.getName(), "Marius");
+        Assert.assertEquals(playerOne.name, "Iwan");
+        Assert.assertEquals(playerTwo.name, "Marius");
     }
 }

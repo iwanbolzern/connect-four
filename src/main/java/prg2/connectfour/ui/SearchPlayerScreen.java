@@ -111,7 +111,7 @@ public class SearchPlayerScreen extends JPanel
     @Override
     public void invitationReceived(InvitationMsg msg) {
         String str = "Do you want to accept an invitation from " +
-                msg.getPlayer().getName() + " to play connect four?";
+                msg.getPlayer().name + " to play connect four?";
         int result = JOptionPane.showConfirmDialog(null, str, "Invitation",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
@@ -167,7 +167,7 @@ public class SearchPlayerScreen extends JPanel
         public Component getListCellRendererComponent(JList<? extends NetworkPlayer> list, NetworkPlayer value, int index, boolean isSelected, boolean cellHasFocus) {
             GridBagConstraints c = new GridBagConstraints();
 
-            JLabel nameLabel = new JLabel(value.getName());
+            JLabel nameLabel = new JLabel(value.name);
             nameLabel.setFont(font);
 
             c.gridx = 0;
