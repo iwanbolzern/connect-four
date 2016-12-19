@@ -5,6 +5,11 @@ import prg2.connectfour.logic.Grid;
 
 import java.util.ArrayList;
 
+/**
+ * Iterates the grid horizontally
+ *
+ * @author Marius Schuler {@literal <binarytenshi@gmail.com>}
+ */
 class HorizontalGridIterator implements IGridIterator {
     public Iterable<Cell> getCells(Grid grid, int initialX, int initialY) {
         ArrayList<Cell> cells = new ArrayList<>();

@@ -6,6 +6,11 @@ import prg2.connectfour.logic.Grid;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Iterates the grid diagonally to the upper left
+ *
+ * @author Marius Schuler {@literal <binarytenshi@gmail.com>}
+ */
 class DiagonalLeftGridIterator implements IGridIterator {
     @Override
     public Iterable<Cell> getCells(Grid grid, int initialX, int initialY) {
