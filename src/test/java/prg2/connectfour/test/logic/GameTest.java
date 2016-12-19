@@ -90,4 +90,32 @@ public class GameTest {
         Assert.assertFalse(subject.dropOnColumn(two, 2));
         Assert.assertEquals(one, subject.getWinner());
     }
+
+    /**
+     * Test related to bug #9
+     * https://github.com/iwanbolzern/connect-four/issues/9
+     */
+    @Test
+    public void testBug9() {
+        Player one = this.players[0];
+
+        subject.dropOnColumn(3);
+        subject.dropOnColumn(0);
+        subject.dropOnColumn(2);
+        subject.dropOnColumn(1);
+        subject.dropOnColumn(5);
+        subject.dropOnColumn(4);
+        subject.dropOnColumn(3);
+        subject.dropOnColumn(6);
+        subject.dropOnColumn(2);
+        subject.dropOnColumn(0);
+        subject.dropOnColumn(1);
+        subject.dropOnColumn(4);
+        subject.dropOnColumn(3);
+        subject.dropOnColumn(5);
+        subject.dropOnColumn(3);
+
+        Assert.assertTrue(subject.isFinished());
+        Assert.assertEquals(one, subject.getWinner());
+    }
 }

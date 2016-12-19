@@ -23,11 +23,11 @@ public class IteratorWinRuleTest {
     }
 
     private void prepareGrid(String... lines) {
-        assert lines.length == GRID_HEIGHT;
+        assert lines.length == this.grid.getHeight();
 
-        for (int y = GRID_HEIGHT - 1; y >= 0; --y) {
+        for (int y = this.grid.getHeight() - 1; y >= 0; --y) {
             char[] chars = lines[y].toCharArray();
-            assert chars.length == GRID_WIDTH;
+            assert chars.length == this.grid.getWidth();
 
             for (int x = 0; x < chars.length; x++) {
                 int num = chars[x] - '0';
@@ -90,5 +90,26 @@ public class IteratorWinRuleTest {
 
         Player result = IteratorWinRule.DiagonalLeft.playerWon(this.grid);
         Assert.assertEquals(this.players[1], result);
+    }
+
+    /**
+     * Test related to bug #9
+     * https://github.com/iwanbolzern/connect-four/issues/9
+     */
+    @Test
+    public void testBug9() {
+        this.grid = new Grid(7, 6);
+
+        prepareGrid(
+                "0000000",
+                "0002000",
+                "0001000",
+                "0001000",
+                "2111220",
+                "2211212"
+        );
+
+        Player result = IteratorWinRule.Vertical.playerWon(this.grid);
+        Assert.assertEquals(this.players[0], result);
     }
 }
