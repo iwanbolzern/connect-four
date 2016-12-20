@@ -1,8 +1,8 @@
 package prg2.connectfour.logic;
 
-import prg2.connectfour.logic.rule.IteratorWinRule;
-
 import java.util.ArrayList;
+
+import prg2.connectfour.logic.rule.IteratorWinRule;
 
 /**
  * Represents the whole connect-four game

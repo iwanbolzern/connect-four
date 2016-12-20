@@ -1,9 +1,16 @@
 package prg2.connectfour.persistence;
 
-import prg2.connectfour.logic.*;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import prg2.connectfour.logic.Game;
+import prg2.connectfour.logic.GameFactory;
+import prg2.connectfour.logic.Grid;
+import prg2.connectfour.logic.Player;
 
 public class SaveManager {
     private ISaveFileProvider saveFileProvider;

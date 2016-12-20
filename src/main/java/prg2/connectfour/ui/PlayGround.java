@@ -1,13 +1,12 @@
 package prg2.connectfour.ui;
 
-import java.util.ArrayList;
-
-import java.awt.Font;
-import java.awt.Dimension;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,9 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import prg2.connectfour.comlayer.NetworkEnv;
 import prg2.connectfour.comlayer.NetworkEnv.MoveHandler;
 import prg2.connectfour.comlayer.NetworkPlayer;
-import prg2.connectfour.comlayer.NetworkEnv;
 import prg2.connectfour.logic.Cell;
 import prg2.connectfour.logic.Color;
 import prg2.connectfour.logic.Game;

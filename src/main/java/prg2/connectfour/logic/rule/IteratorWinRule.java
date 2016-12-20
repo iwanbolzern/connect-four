@@ -1,10 +1,10 @@
 package prg2.connectfour.logic.rule;
 
+import java.util.Stack;
+
 import prg2.connectfour.logic.Grid;
 import prg2.connectfour.logic.Player;
 import prg2.connectfour.utils.Pair;
-
-import java.util.Stack;
 
 /**
  * Iterates the grid and searches for wins.

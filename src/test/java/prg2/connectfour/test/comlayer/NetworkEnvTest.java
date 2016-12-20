@@ -1,13 +1,14 @@
 package prg2.connectfour.test.comlayer;
 
+import java.util.concurrent.Semaphore;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import prg2.connectfour.comlayer.NetworkPlayer;
-import prg2.connectfour.comlayer.NetworkEnv;
 
-import java.util.concurrent.Semaphore;
+import prg2.connectfour.comlayer.NetworkEnv;
+import prg2.connectfour.comlayer.NetworkPlayer;
 
 public class NetworkEnvTest {
     private NetworkEnv clientOne;

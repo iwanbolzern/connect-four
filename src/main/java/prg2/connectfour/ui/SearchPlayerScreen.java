@@ -1,16 +1,23 @@
 package prg2.connectfour.ui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
 
 import prg2.connectfour.comlayer.InvitationMsg;
 import prg2.connectfour.comlayer.InvitationResponseMsg;
@@ -19,7 +26,6 @@ import prg2.connectfour.comlayer.NetworkEnv.InvitationHandler;
 import prg2.connectfour.comlayer.NetworkEnv.InvitationResponseHandler;
 import prg2.connectfour.comlayer.NetworkEnv.PlayerHandler;
 import prg2.connectfour.comlayer.NetworkPlayer;
-import prg2.connectfour.utils.Pair;
 
 /**
  * SearchPlayerScreen displays a list of players to choose

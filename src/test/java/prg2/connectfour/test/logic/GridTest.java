@@ -3,6 +3,7 @@ package prg2.connectfour.test.logic;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import prg2.connectfour.logic.Cell;
 import prg2.connectfour.logic.Color;
 import prg2.connectfour.logic.Grid;

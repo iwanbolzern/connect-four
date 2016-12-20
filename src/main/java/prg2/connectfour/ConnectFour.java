@@ -1,30 +1,28 @@
 package prg2.connectfour;
 
+import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
-import java.awt.Dimension;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowAdapter;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
-import javax.swing.*;
-
+import prg2.connectfour.comlayer.InvitationMsg;
+import prg2.connectfour.comlayer.InvitationResponseMsg;
+import prg2.connectfour.comlayer.NetworkEnv;
+import prg2.connectfour.comlayer.NetworkPlayer;
 import prg2.connectfour.logic.Color;
 import prg2.connectfour.logic.Game;
 import prg2.connectfour.logic.Player;
 import prg2.connectfour.logic.bot.GameTheory;
-import prg2.connectfour.ui.HomeScreen;
-import prg2.connectfour.ui.PlayGround;
-import prg2.connectfour.ui.PlayGroundSizeDialog;
-import prg2.connectfour.ui.SearchPlayerScreen;
-import prg2.connectfour.ui.HomeScreen.GameMode;
-import prg2.connectfour.utils.Pair;
-import prg2.connectfour.utils.Utils;
-import prg2.connectfour.comlayer.InvitationResponseMsg;
-import prg2.connectfour.comlayer.InvitationMsg;
-import prg2.connectfour.comlayer.NetworkPlayer;
-import prg2.connectfour.comlayer.NetworkEnv;
-import prg2.connectfour.persistence.SaveManager;
 import prg2.connectfour.persistence.SaveFileProvider;
+import prg2.connectfour.persistence.SaveManager;
+import prg2.connectfour.ui.HomeScreen;
+import prg2.connectfour.ui.HomeScreen.GameMode;
+import prg2.connectfour.ui.PlayGround;
+import prg2.connectfour.ui.SearchPlayerScreen;
 
 public class ConnectFour extends JFrame {
     private NetworkEnv networkEnv;

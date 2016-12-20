@@ -3,6 +3,7 @@ package prg2.connectfour.test.logic.rule;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import prg2.connectfour.logic.Color;
 import prg2.connectfour.logic.Grid;
 import prg2.connectfour.logic.Player;

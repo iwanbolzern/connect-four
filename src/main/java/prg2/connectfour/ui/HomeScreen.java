@@ -1,21 +1,19 @@
 package prg2.connectfour.ui;
 
 
-import java.util.ArrayList;
-
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.JPanel;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class HomeScreen extends JPanel implements ActionListener {
     private ArrayList<PlayHandler> playListeners = new ArrayList<>();

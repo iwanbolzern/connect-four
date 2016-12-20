@@ -1,10 +1,10 @@
 package prg2.connectfour.logic.rule;
 
-import prg2.connectfour.logic.Cell;
-import prg2.connectfour.logic.Grid;
-
 import java.util.ArrayList;
 import java.util.Objects;
+
+import prg2.connectfour.logic.Cell;
+import prg2.connectfour.logic.Grid;
 
 /**
  * Iterates the grid diagonally to the upper left

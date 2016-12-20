@@ -1,9 +1,9 @@
 package prg2.connectfour.logic.rule;
 
+import java.util.ArrayList;
+
 import prg2.connectfour.logic.Cell;
 import prg2.connectfour.logic.Grid;
-
-import java.util.ArrayList;
 
 /**
  * Iterates the grid vertically

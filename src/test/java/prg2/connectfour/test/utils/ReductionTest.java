@@ -1,13 +1,14 @@
 package prg2.connectfour.test.utils;
 
-import org.junit.Assert;
-import org.junit.Test;
-import prg2.connectfour.utils.Pair;
-import prg2.connectfour.utils.Reduction;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import prg2.connectfour.utils.Pair;
+import prg2.connectfour.utils.Reduction;
 
 public class ReductionTest {
     @Test

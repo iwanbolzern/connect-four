@@ -1,12 +1,12 @@
 package prg2.connectfour.logic.rule;
 
+import java.util.Stack;
+
 import prg2.connectfour.logic.Cell;
 import prg2.connectfour.logic.Grid;
 import prg2.connectfour.logic.Player;
 import prg2.connectfour.utils.Pair;
 import prg2.connectfour.utils.Reduction;
-
-import java.util.Stack;
 
 /**
  * Reduces the cells returned by an {@link IGridIterator}

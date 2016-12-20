@@ -2,15 +2,12 @@ package prg2.connectfour.comlayer;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import prg2.connectfour.logic.Color;
-import prg2.connectfour.utils.Pair;
 import prg2.connectfour.utils.Utils;
 
 /**
