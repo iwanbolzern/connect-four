@@ -154,6 +154,7 @@ public class PlayGround extends JPanel implements MoveHandler {
             buttons[i].addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     int a = Integer.parseInt(e.getActionCommand());
+                    System.out.println("Droped to column: " + a);
                     game.dropOnColumn(a);
                     if (networkEnv != null)
                         networkEnv.sendMove(networkPlayer, a);
