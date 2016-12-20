@@ -13,13 +13,17 @@ import prg2.connectfour.logic.Color;
 import prg2.connectfour.utils.Pair;
 import prg2.connectfour.utils.Utils;
 
+/**
+ * Provides the whole network environment and all communication channels
+ * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+ */
 public class NetworkEnv {
 
     private static final int lowerPortRange = 50000;
     private static final int upperPortRange = 50005;
 
-    UdpConnection udpConnection;
-    String playerName;
+    private UdpConnection udpConnection;
+    private String playerName;
 
     private HashMap<String, NetworkPlayer> activeConnections = new HashMap<>();
     private HashMap<String, InvitationMsg> pendingInvitations = new HashMap<>();
@@ -30,11 +34,19 @@ public class NetworkEnv {
     private List<StartGameHandler> startGameListeners = new ArrayList<>();
     private List<MoveHandler> moveListeners = new ArrayList<>();
 
+    /**
+     * initializes the network environment
+     * @param name of the current player
+     */
     public void init(String playerName) {
         this.playerName = playerName;
         initUdpConnection();
     }
     
+    /**
+     * closes all udp listeners and removes all
+     * msg listeners.
+     */
     public void dispose() {
     	this.udpConnection.dispose();
     	
@@ -145,6 +157,9 @@ public class NetworkEnv {
         }
     }
 
+    /**
+     * Sends a helloMsg to all available players in the sub-net
+     */
     public void broadcastHelloMsg() {
         System.out.println("Broadcast hello message");
         HelloMsg msg = new HelloMsg();
@@ -155,6 +170,13 @@ public class NetworkEnv {
             this.udpConnection.sendBroadcast(msg, port);
     }
 
+    /**
+     * Sends a invitation to the given network player
+     * @param network player where the invitation has to be send
+     * @param the width of the playground
+     * @param the height of the playground
+     * @return invitationToken token to identified invitation response
+     */
     public String sendInvitation(NetworkPlayer player, int x, int y) {
         checkPlayer(player);
         InvitationMsg invatation = new InvitationMsg();
@@ -167,6 +189,11 @@ public class NetworkEnv {
         return invatation.getInvitationToken();
     }
 
+    /**
+     * Sends a invitation response for a given invitation
+     * @param invitation where the response has to be sent
+     * @param wantToPlay true if player wants to play
+     */
     public void sendInvitationResponse(InvitationMsg invitation, boolean wantToPlay) {
         checkPlayer(invitation.getPlayer());
         InvitationResponseMsg msg = new InvitationResponseMsg();
@@ -176,6 +203,12 @@ public class NetworkEnv {
         this.udpConnection.sendMessage(msg, invitation.getPlayer().getInetAdress(), invitation.getPlayer().getPort());
     }
 
+    /**
+     * Sends a start game handshake msg to start a game
+     * @param player who wants to play
+     * @param invitationToken where the other player has responsed with yes.
+     * @return secure game token
+     */
     public String sendStartGame(NetworkPlayer player, String invitationToken) {
         checkPlayer(player);
         StartGameMsg msg = new StartGameMsg();
@@ -186,6 +219,11 @@ public class NetworkEnv {
         return msg.getGameToken();
     }
 
+    /**
+     * Sends a move for a given game
+     * @param player who should receive the move
+     * @param x coordinate of the current move
+     */
     public void sendMove(NetworkPlayer player, int x) {
         checkPlayer(player);
         MoveMsg msg = new MoveMsg();
@@ -207,14 +245,11 @@ public class NetworkEnv {
     }
 
     /**
-     * Checks to see if a specific port is available.
-     *
-     * @param port
-     *            the port to check for availability
-     *
+     * Checks if a specific port is available.
+     * @param port the port to check for availability
      * @return port is available
      */
-    public static boolean available(int port) {
+    private static boolean available(int port) {
         ServerSocket ss = null;
         DatagramSocket ds = null;
         try {
@@ -241,53 +276,122 @@ public class NetworkEnv {
         return false;
     }
 
+    /**
+     * adds listener to receive if new player is detected in network
+     * @param listener new player listener
+     */
     public void addNewPlayerListener(PlayerHandler listener) {
         playerListeners.add(listener);
     }
 
+    /**
+     * adds listener to receive new invitations 
+     * @param listener for invitations
+     */
     public void addInvitationListener(InvitationHandler listener) {
         invitationListeners.add(listener);
     }
 
+    /**
+     * adds listener to receive invitations responses
+     * @param listener for invitations responses
+     */
     public void addInvitationResponseListener(InvitationResponseHandler listener) {
         invitationResponseListeners.add(listener);
     }
 
+    /**
+     * adds listener to receive start game
+     * @param listener for start game
+     */
     public void addStartGameListener(StartGameHandler listener) {
         startGameListeners.add(listener);
     }
 
+    /**
+     * adds listener to receive move
+     * @param listener for moves
+     */
     public void addMoveListener(MoveHandler listener) {
         moveListeners.add(listener);
     }
 
+    /**
+     * removes all move listeners
+     */
     public void removeAllMoveListeners() {
         moveListeners.clear();
     }
 
+    /**
+     * removes all player listeners, invitation listeners and invitation response listeners
+     */
     public void removeAllFromSearchProcess() {
         playerListeners.clear();
         invitationListeners.clear();
         invitationResponseListeners.clear();
     }
 
+    /**
+     * Handler for new player
+     * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+     */
     public interface PlayerHandler {
+        /**
+         * new player detected in network
+         * @param newPlayer from network
+         */
         void newPlayerDetected(NetworkPlayer newPlayer);
     }
 
+    /**
+     * Handler for invitations
+     * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+     */
     public interface InvitationHandler {
+        /**
+         * invitation received
+         * @param invitation
+         */
         void invitationReceived(InvitationMsg msg);
     }
 
+    /**
+     * Handler for invitations responses
+     * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+     */
     public interface InvitationResponseHandler {
+        /**
+         * invitation response received
+         * @param invitation response
+         * @param corresponding invitations
+         */
         void invitationResponseReceived(InvitationResponseMsg msg, InvitationMsg invitation);
     }
 
+    /**
+     * Handler for moves
+     * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+     */
     public interface MoveHandler {
+        /**
+         * move performed
+         * @param x coordinate of the move
+         */
         void movePerformed(int x);
     }
 
+    /**
+     * Handler for start game
+     * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+     */
     public interface StartGameHandler {
+        /**
+         * start game received
+         * @param gameToken secure game token
+         * @param x width of the play ground
+         * @param y height of the play ground
+         */
         void startGame(String gameToken, int x, int y);
     }
 }

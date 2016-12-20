@@ -28,10 +28,18 @@ public class MoveMsg extends Msg implements Serializable {
 		this.x = x;
 	}
 	
+	/**
+	 * Return the token for a secure game
+	 * @return Gametoken
+	 */
 	public String getGameToken() {
         return gameToken;
     }
 
+	/**
+	 * Sets the token for a secure game
+	 * @param secure game token
+	 */
     public void setGameToken(String gameToken) {
         this.gameToken = gameToken;
     }

@@ -18,6 +18,10 @@ import java.util.Enumeration;
 
 import prg2.connectfour.utils.Utils;
 
+/**
+ * Handles all udp based messages
+ * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+ */
 public class UdpConnection {
     private static final int maxMsgSize = 65535;
 
@@ -31,6 +35,10 @@ public class UdpConnection {
     private Thread listenThread;
     private Object lock = new Object();
 
+    /**
+     * initializes the udp listener on the given port
+     * @param listenPort port where udp listener is opened
+     */
     public void init(int listenPort) {
         this.listenPort = listenPort;
         if (this.token == null)
@@ -45,6 +53,9 @@ public class UdpConnection {
         }
     }
     
+    /**
+     * removes all udp listeners and frees all resources
+     */
     public void dispose() {
     	isListening = false;
     	this.socket.close();
@@ -58,6 +69,10 @@ public class UdpConnection {
 		}
     }
 
+    /**
+     * register receiver for new messages
+     * @param receiver for new messages
+     */
     public void registerMsgReceiver(MsgReceiver receiver) {
         this.receivers.add(receiver);
     }
@@ -108,19 +123,19 @@ public class UdpConnection {
         }
     }
 
+    /**
+     * returns port of the udp listener
+     * @return port of the udp listener
+     */
     public int getListenPort() {
         return this.listenPort;
     }
 
     /**
      * Send a message over the udp socket.
-     * 
-     * @param msg
-     *            message to send
-     * @param destination
-     *            destination address
-     * @param port
-     *            destination port
+     * @param msg message to send
+     * @param destination destination address
+     * @param port destination port
      */
     public void sendMessage(Msg msg, InetAddress destination, int port) {
         System.out.println(msg.toString() + "sent to to " + destination + ":" + port);
@@ -138,6 +153,11 @@ public class UdpConnection {
         }
     }
 
+    /**
+     * Sends a message to a broadcast destination
+     * @param msg message to send
+     * @param port destination port
+     */
     public void sendBroadcast(Msg msg, int port) {
         try {
             sendMessage(msg, InetAddress.getByName("255.255.255.255"), port);
@@ -169,7 +189,15 @@ public class UdpConnection {
         }
     }
 
+    /**
+     * Handler for udp messages
+     * @author Iwan Bolzern <iwan.bolzern@ihomelab.ch>
+     */
     public interface MsgReceiver {
+        /**
+         * new udp message received
+         * @param msg udp message
+         */
         public void msgReceived(Msg msg);
 
     }
