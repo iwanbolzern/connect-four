@@ -147,7 +147,8 @@ public class SearchPlayerScreen extends JPanel
     public void invitationResponseReceived(InvitationResponseMsg msg, InvitationMsg invitation) {
         if (this.invitationTokens.containsKey(msg.getInvitationToken())) {
             NetworkPlayer opponent = this.invitationTokens.get(msg.getInvitationToken());
-            this.onStartGame(invitation, opponent, msg);
+            if(msg.isInvitationAccepted())
+                this.onStartGame(invitation, opponent, msg);
         }
     }
 
