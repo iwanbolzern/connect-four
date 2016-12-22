@@ -1,5 +1,7 @@
 package prg2.connectfour.logic;
 
+import prg2.connectfour.utils.Pair;
+
 import java.util.Arrays;
 
 /**
@@ -90,5 +92,23 @@ public class Grid {
      */
     private int getIndex(int x, int y) {
         return (this.width * y) + x;
+    }
+
+    /**
+     * @param players Players
+     * @deprecated Use {@link GameFactory}
+     */
+    @Deprecated
+    public void replacePlayers(Player[] players) {
+        Player yellow = players[0].color == Color.Yellow ? players[0] : players[1];
+        Player red = players[0].color == Color.Red ? players[0] : players[1];
+
+        for (Cell c : cells) {
+            Player owner = c.getOwner();
+            if (owner == null)
+                continue;
+
+            c.setOwner(owner.color == Color.Yellow ? yellow : red);
+        }
     }
 }

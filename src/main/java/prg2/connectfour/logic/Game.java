@@ -77,8 +77,11 @@ public class Game {
      * Sets the players
      *
      * @param players Players
+     * @deprecated Use {@link GameFactory}
      */
+    @Deprecated
     public void setPlayers(Player[] players) {
+        this.grid.replacePlayers(players);
         this.players = players;
         this.playerCount = players.length;
     }
