@@ -149,6 +149,8 @@ public class SearchPlayerScreen extends JPanel
             NetworkPlayer opponent = this.invitationTokens.get(msg.getInvitationToken());
             if(msg.isInvitationAccepted())
                 this.onStartGame(invitation, opponent, msg);
+            else
+                JOptionPane.showMessageDialog(null, opponent.name + " has declined your invitation!");
         }
     }
 
