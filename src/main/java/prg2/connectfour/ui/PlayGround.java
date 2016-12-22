@@ -25,10 +25,12 @@ import prg2.connectfour.logic.GameFactory;
 import prg2.connectfour.logic.Grid;
 import prg2.connectfour.logic.Player;
 import prg2.connectfour.logic.bot.GameTheory;
+import prg2.connectfour.ui.HomeScreen.GameMode;
 
 public class PlayGround extends JPanel implements MoveHandler {
     private ArrayList<EndGameHandler> endGameListeners = new ArrayList<>();
 
+    private GameMode gameMode;
     private Grid grid;
     private Game game;
     private Player[] players = new Player[2];
@@ -64,6 +66,7 @@ public class PlayGround extends JPanel implements MoveHandler {
     }
 
     public void networkInit(NetworkEnv env, String gameToken, NetworkPlayer player, boolean canIStart) {
+        this.gameMode = GameMode.NETWORK;
         this.networkEnv = env;
         this.gameToken = gameToken;
         this.networkPlayer = player;
@@ -79,6 +82,7 @@ public class PlayGround extends JPanel implements MoveHandler {
     }
 
     public void singleInit(Game game, GameTheory bot) {
+        this.gameMode = GameMode.SINGLE;
         this.players[1] = bot;
 
         initGame(game);
@@ -225,6 +229,10 @@ public class PlayGround extends JPanel implements MoveHandler {
 
     public Game getGame() {
         return this.game;
+    }
+    
+    public GameMode getGameMode() {
+        return this.gameMode;
     }
 
     public void addEndGameListener(EndGameHandler handler) {

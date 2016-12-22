@@ -29,6 +29,7 @@ public class ConnectFour extends JFrame {
     private SaveManager saveManager;
 
     // Screens
+    private JPanel activeView;
     private HomeScreen homeScreen;
     private SearchPlayerScreen searchPlayerScreen;
     private PlayGround playGround;
@@ -45,7 +46,9 @@ public class ConnectFour extends JFrame {
                 @Override
                 public void windowClosing(WindowEvent we) {
                     try {
-                        saveManager.save(playGround.getGame());
+                        if(activeView == playGround && 
+                                playGround.getGameMode() == GameMode.SINGLE)
+                            saveManager.save(playGround.getGame());
                     } catch (IOException e) {
 
                     }
@@ -54,10 +57,12 @@ public class ConnectFour extends JFrame {
         this.saveManager = new SaveManager(new SaveFileProvider());
         this.initHomeScreen();
         this.add(this.homeScreen);
+        this.activeView = this.homeScreen;
         this.revalidate();
     }
 
     private void transition(JPanel from, JPanel to) {
+        this.activeView = to;
         this.remove(from);
         this.add(to);
         this.revalidate();
